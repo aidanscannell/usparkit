@@ -48,3 +48,6 @@ Route::get('/User/{username}', [
 Route::get('resizeImage', 'ImageController@resizeImage');
 // Image Controller Post
 Route::post('resizeImagePost',['as'=>'resizeImagePost','uses'=>'ImageController@resizeImagePost']);
+
+// Connections Controller Get
+Route::get('/Connections', 'ConnectionsController@getConnections');

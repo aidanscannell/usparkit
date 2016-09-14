@@ -92,7 +92,7 @@ class UserController extends Controller
             $sponsorship_advert->modalRef2 = 'advertModal';
             $sponsorship_advert->modalRef3 = 'is Sponsoring up to';
           }
-
+          
           if ($sponsorship_advert->amount_units == 'amount'){
           	$sponsorship_advert->amount_units = '£';
           	$sponsorship_advert->amount_units_percent = '';
@@ -100,7 +100,6 @@ class UserController extends Controller
           	$sponsorship_advert->amount_units_percent = '	%';
           	$sponsorship_advert->amount_units = '';
           }
-
         }
 
         return view('user', [
