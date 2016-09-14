@@ -68,13 +68,49 @@ class UserController extends Controller
                                                             ->orderBy('senttime', 'desc')
                                                             ->get();*/
 
+        $sponsorship_adverts = \DB::table('sponsorship_adverts')->leftJoin('users', 'user', '=', 'username')
+                                                  ->where('user','=',$pageOwner->username)
+                                                  ->where('deletedAdvert','=','0')
+                                                  ->orderBy('senttime', 'desc')
+                                                  ->limit(4)
+                                                  ->get();
+
+        foreach($sponsorship_adverts as $sponsorship_advert){
+          $datetime = new DateTime($sponsorship_advert->senttime);
+      		$sponsorship_advert->day= $datetime->format('d');
+      		$sponsorship_advert->year= $datetime->format('Y');
+      		$monthNum = $datetime->format('m');
+      		$sponsorship_advert->monthName = date('M', mktime(0, 0, 0, $monthNum, 10)); // March
+      		$sponsorship_advert->time = $datetime->format('H:i:s');
+
+          if($sponsorship_advert->userType == 'looking_to_get_sponsored'){
+            $sponsorship_advert->modalRef = '#requestModal';
+            $sponsorship_advert->modalRef2 = 'requestModal';
+            $sponsorship_advert->modalRef3 = 'is Seeking Sponsorship of';
+          } elseif($sponsorship_advert->userType == 'looking_to_sponsor'){
+            $sponsorship_advert->modalRef = '#advertModal';
+            $sponsorship_advert->modalRef2 = 'advertModal';
+            $sponsorship_advert->modalRef3 = 'is Sponsoring up to';
+          }
+
+          if ($sponsorship_advert->amount_units == 'amount'){
+          	$sponsorship_advert->amount_units = '£';
+          	$sponsorship_advert->amount_units_percent = '';
+          } else if ($sponsorship_advert->amount_units == 'percent'){
+          	$sponsorship_advert->amount_units_percent = '	%';
+          	$sponsorship_advert->amount_units = '';
+          }
+
+        }
+
         return view('user', [
           'user' => Auth::user(),
           'pageOwner' => $pageOwner,
           'display' => $display,
           'photos' => $photos,
           'friendsLogic' => $friendsLogic,
-          'oFriends' => $oFriends
+          'oFriends' => $oFriends,
+          'sponsorship_adverts' => $sponsorship_adverts,
         ]);
     }
 
@@ -82,12 +118,6 @@ class UserController extends Controller
     {
         return view('account', ['user' => Auth::user()]);
     }
-
-    /*public function getLogout()
-    {
-        Auth::logout();
-        return redirect()->route('homepage');
-    }*/
 
     public function postSaveAccount(Request $request)
     {

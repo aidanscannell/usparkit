@@ -49,7 +49,61 @@
 
             <!-- Modal Start-->
             <?php //echo $advertModals; //echo $requestModals; ?>
-            <!-- Modal End-->
+            @foreach($sponsorship_adverts as $sponsorship_advert)
+              <div class="modal fade" id="{{ $sponsorship_advert->modalRef2 }}{{ $sponsorship_advert->advert_id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            		<div class="modal-dialog">
+            			<div class="modal-content">
+            				<div class="modal-header">
+            					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            					<h4 class="modal-title" id="myModalLabel">{{ $display->pageUsernameSpace }} {{ $sponsorship_advert->modalRef3 }} {{ $sponsorship_advert->amount_units }}{{ $sponsorship_advert->amount }}{{ $sponsorship_advert->amount_units_percent }} in
+                      @if ($sponsorship_advert->sponsorshipType == 'custom_stash')
+                        Custom Stash
+                      @elseif ($sponsorship_advert->sponsorshipType == 'voucher')
+                        Vouchers
+                      @elseif ($sponsorship_advert->sponsorshipType == 'gift_card')
+                        Gift Cards
+                      @elseif ($sponsorship_advert->sponsorshipType == 'donation')
+                        Donations
+                      @endif
+                    </h4>
+            				</div>
+            				<div class="modal-body">
+            					<div class="row">
+            						<div class="col-md-6">
+            							<a href="/User/{{ $sponsorship_advert->user }}"><img  src="/userz/{{ $sponsorship_advert->username }}/{{ $sponsorship_advert->avatar }}" alt=""></a>
+            							<div id="statusui">
+
+                            <div class="comments-form">
+                          		<h4 class="title">Send a Private Message</h4>
+                          		<form id="form" name="form" method="post" class="form" role="form" action="[[~[[*id]]]]" enctype="multipart/form-data">
+                          	     <div class="form-group has-feedback">
+                          				<label for="subject1">Subject</label>
+                          				<input class="form-control" rows="8" id="subject{{ $sponsorship_advert->advert_id }}" placeholder="" onkeyup="statusMax(this,50)" required>
+                          				<i class="fa fa-navicon form-control-feedback"></i>
+                          			</div>
+                          			<div class="form-group has-feedback">
+                          				<label for="message1">Message</label>
+                          				<textarea class="form-control" rows="3" id="message{{ $sponsorship_advert->advert_id }}" placeholder="" onkeyup="statusMax(this,300)" required></textarea>
+                          				<i class="fa fa-envelope-o form-control-feedback"></i>
+                          			</div>
+                          			<button id="btn{{ $sponsorship_advert->advert_id }}" type="button" class="btn btn-default" onclick="postPm('{{ $sponsorship_advert->username }}','{{ Auth::user()->username }}','subject{{ $sponsorship_advert->advert_id }}','message{{ $sponsorship_advert->advert_id }}','btn{{ $sponsorship_advert->advert_id }}')">Post</button>
+                          		</form>
+                          	</div>
+
+            							</div>
+            						</div>
+            						<div class="col-md-6">
+            							<p>{!! $sponsorship_advert->sponsorshipDetails !!}</p>
+            						</div>
+            					</div>
+            				</div>
+            				<div class="modal-footer">
+            					<button type="button" class="btn btn-sm btn-dark" data-dismiss="modal">Close</button>
+            				</div>
+            			</div>
+            		</div>
+            	</div>
+            @endforeach
 
           </div>
         </div>
@@ -71,6 +125,8 @@
       						</div>
       						<a href="/userz/{{ $pageOwner->username }}/{{ $pageOwner->avatar }}" class="popup-img overlay-link" title=""><i class="icon-plus-1"></i></a>
       					</div>
+
+                <!-- START of PHOTOS MODAL -->
                 @foreach($photos as $photo)
                   <div class="overlay-container overlay-visible">
           						<img src="/userz/{{ $pageOwner->username }}/{{ $photo->filename }}"  alt="">
@@ -83,7 +139,6 @@
           					</div>
                 @endforeach
               </div>
-
 
               @if ($pageOwner->username == Auth::user()->username)
                 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -147,6 +202,7 @@
               @endif
 
             </div>
+            <!-- END of PHOTOS MODAL -->
 
             <br>
 
@@ -304,7 +360,33 @@
                 <div class="block clearfix">
                   <h4 class="title">{{ $display->pageUsernameSpace }}'s Sponsorship Adverts</h4>
                   <div class="separator-2"></div>
-                  <?php //echo $sponsorshipAdvert; ?>
+
+                  @foreach($sponsorship_adverts as $sponsorship_advert)
+                    <div class="media margin-clear">
+            					<div class="media-left">
+            						<div class="overlay-container">
+            							<img class="media-object" src="/userz/{{ $sponsorship_advert->user }}/{{ $sponsorship_advert->avatar }}" alt="">
+            							<a class="overlay-link small" data-toggle="modal" data-target="{{ $sponsorship_advert->modalRef }}{{ $sponsorship_advert->advert_id }}"><i class="fa fa-link"></i></a>
+            						</div>
+            					</div>
+            					<div class="media-body">
+            						<h6 class="media-heading"><a>
+                          @if ($sponsorship_advert->sponsorshipType == 'custom_stash')
+                      			Custom Stash
+                      		@elseif ($sponsorship_advert->sponsorshipType == 'voucher')
+                      			Voucher
+                      		@elseif ($sponsorship_advert->sponsorshipType == 'gift_card')
+                      			Gift Card
+                      		@elseif ($sponsorship_advert->sponsorshipType== 'donation')
+                      			Donation
+                      		@endif
+                        </a></h6>
+            						<p class="small margin-clear"><i class="fa fa-calendar pr-10"></i>{{ $sponsorship_advert->day }} {{ $sponsorship_advert->monthName }} {{ $sponsorship_advert->year }}</p>
+            					</div>
+            					<hr>
+            				</div>
+                  @endforeach
+
                   <div class="text-right space-top">
                     <a href="/Sponsorship-Adverts" class="link-dark"><i class="fa fa-plus-circle pl-5 pr-5"></i>More</a>
                   </div>

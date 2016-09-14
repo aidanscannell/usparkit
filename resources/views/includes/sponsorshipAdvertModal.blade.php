@@ -95,7 +95,7 @@
                       <a onClick="iOrderedListAdvert()" value="OL" id="bulletList" class="wysiwygBtn" title="Bullet List">Bullet List</a>
                       <a onClick="iLinkAdvert()" value="Link" id="Link" class="wysiwygBtn" title="Insert Link">Link</a>
                     </div>
-                    <iframe onload="iFrameOnAdvert()" src="advertDetailsTemplate.html" class="form-control" name="richTextFieldAdvert" id="richTextFieldAdvert" style="border:#000000 1px solid; width:100%; height:200px;" scrolling="yes"></iframe>
+                    <iframe onload="iFrameOnAdvert()" src="/src/html/advert-details-template.html" class="form-control" name="richTextFieldAdvert" id="richTextFieldAdvert" style="border:#000000 1px solid; width:100%; height:200px;" scrolling="yes"></iframe>
                 </div>
 
 
