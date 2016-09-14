@@ -44,8 +44,6 @@ Route::get('/User/{username}', [
     'middleware' => 'auth'
 ]);
 
-
-
 // Image Controller Get
 Route::get('resizeImage', 'ImageController@resizeImage');
 // Image Controller Post
