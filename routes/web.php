@@ -51,3 +51,7 @@ Route::post('resizeImagePost',['as'=>'resizeImagePost','uses'=>'ImageController@
 
 // Connections Controller Get
 Route::get('/Connections', 'ConnectionsController@getConnections');
+
+Auth::routes();
+
+Route::get('/home', function(){return view('homepage');});

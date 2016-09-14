@@ -52,7 +52,7 @@
                   <button type="submit" class="btn btn-group btn-default btn-animated" id="loginbtn" >Log In <i class="fa fa-user"></i></button>
                   <p id="status"></p>
                   <ul class="space-top">
-                    <li><a href="Forgot-Password">Forgot your password?</a></li>
+                    <li><a href="/password/reset">Forgot your password?</a></li>
                   </ul>
                 </div>
               </div>
