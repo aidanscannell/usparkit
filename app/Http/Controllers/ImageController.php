@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Image;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Image;
+use DateTime;
+use App\User;
+use App\Photos;
 
 class ImageController extends Controller
 {
@@ -28,7 +31,7 @@ class ImageController extends Controller
     public function resizeImagePost(Request $request)
     {
         $this->validate($request, [
-          'title' => 'required',
+          'description' => 'required',
               'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
           ]);
 
@@ -53,8 +56,14 @@ class ImageController extends Controller
 
           //$this->postImage->add($input);
 
+          $photos = new Photos;
+          $photos->filename = $input['imagename'];
+          $photos->user = $username;
+          $photos->gallery = $request['description'];
+          $photos->avatar = 1;
+          $photos->save();
+
           return back()
-            ->with('message','Image Upload successful')
-            ->with('imageName',$input['imagename']);
+            ->with('message','Image Upload successful');
     }
 }

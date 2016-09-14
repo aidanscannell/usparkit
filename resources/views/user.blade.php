@@ -37,6 +37,8 @@
     <!-- ================ -->
     <section class="main-container">
       <div class="container">
+
+        @include('includes.message-block')
         <div class="row">
           <div class="main col-md-12">
 
@@ -94,11 +96,12 @@
               				<div class="modal-body">
               					<div class="row">
               						<div class="col-md-6 col-sm-6 col-xs-8">
-              							<form id="photo_form" enctype="multipart/form-data" method="post" action="php_parsers/photo_system.php">
+              							<form id="photo_form" enctype="multipart/form-data" method="post" action="/resizeImagePost">
               								<h3>Add Photo</h3>
-              								<input class="form-control" name="gallery" length="4" placeholder="Description" required/><br />
-              								<span class="btn btn-default btn-file">Choose File<input type="file" name="photo" accept="image/*" required></span>
+              								<input class="form-control" name="description" length="4" placeholder="Description" required/><br />
+              								<span class="btn btn-default btn-file">Choose File<input type="file" name="image" accept="image/*" required></span>
               								<p><input class="btn btn-default" type="submit" value="Upload Photo Now"></p>
+                              {{ csrf_field() }}
               							</form>
               						</div>
               						<div class="col-md-6 col-sm-6 col-xs-8">
