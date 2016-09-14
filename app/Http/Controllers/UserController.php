@@ -28,9 +28,9 @@ class UserController extends Controller
 
         // Select page owners friends where accepted
         $oFriends = \App\Friends::where('user1', '=', $pageOwner->username)
-                                ->where('accepted', '=', 1)
+                                ->where('accepted', '=', '1')
                                 ->orWhere('user2', '=', $pageOwner->username)
-                                ->where('accepted', '=', 1)->get();
+                                ->where('accepted', '=', '1')->get();
 
         // Select the people that the page owner has blocked
         /*$oBlocked = \App\Blockedusers::where('blocker', '=', $pageOwner->username)->orWhere('blockee', '=', $pageOwner->username)->get();*/
@@ -46,20 +46,21 @@ class UserController extends Controller
         $friends_view_all_link = '';
         $friendsLogic = '';
 
+        $count = 0;
         if($oFriends->count() >= 1){
-        	$max = 6;
+        	$max = 5;
           $orLogic = '';
           foreach ($oFriends as $oFriend){
-            if ($oFriend->user1 != $user->username){
+            if ($oFriend->user1 != $user->username && $count <=5){
               $orLogic .= "username='$oFriend->user1' OR ";
-            } else if ($oFriend->user2 != $user->username){
+            } else if ($oFriend->user2 != $user->username && $count <=5){
               $orLogic .= "username='$oFriend->user2' OR ";
             }
+            $count++;
           }
         	$orLogic = chop($orLogic, "OR ");
           $friendsLogic = \DB::select('select * from users where '.$orLogic.'');
         }
-
 
         // WYSIWYG
         /*$sponsorshipAdvert = \App\SponsorshipAdvert::where('deletedAdvert', '=', '0')
