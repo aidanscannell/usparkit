@@ -1,0 +1,15 @@
+div.pm_wrap {
+  border: 1px solid #333;
+  margin-bottom: 5px;
+  width: 400px;
+  margin-right: auto;
+  margin-left: auto;
+}
+div.pm_header {
+  background-color: #CCC;
+  padding-left: 20px;
+}
+div.pm_post {
+  margin-top: 10px;
+  padding-left: 20px;
+}

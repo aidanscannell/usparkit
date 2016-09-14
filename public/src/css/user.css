@@ -1,0 +1,63 @@
+.chosen-select {
+  width:150px;
+}
+</style>
+<style type="text/css">
+  .input, textarea{
+      background-color:#666;
+      color: #FFF;
+  }
+  * {
+    .border-radius(0) !important;
+  }
+  #field {
+      margin-bottom:20px;
+  }
+  /* enable absolute positioning */
+  .inner-addon {
+      position: relative;
+  }
+  /* style icon */
+  .inner-addon .glyphicon {
+    position: absolute;
+    padding: 10px;
+    pointer-events: none;
+  }
+  /* align icon */
+  .left-addon .glyphicon  { left:  0px;}
+  .right-addon .glyphicon { right: 0px;}
+  /* add padding  */
+  .left-addon input  { padding-left:  30px; }
+  .right-addon input { padding-right: 30px; }
+
+  .wysiwygBtn {
+    white-space:nowrap;
+    font: 2px;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 0.1px 1px 0.1px 1px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+  }
+  .btn-file {
+      position: relative;
+      overflow: hidden;
+  }
+  .btn-file input[type=file] {
+      position: absolute;
+      top: 0;
+      right: 0;
+      min-width: 100%;
+      min-height: 100%;
+      font-size: 100px;
+      text-align: right;
+      filter: alpha(opacity=0);
+      opacity: 0;
+      outline: none;
+      background: white;
+      cursor: inherit;
+      display: block;
+  }
