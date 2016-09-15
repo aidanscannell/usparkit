@@ -106,6 +106,25 @@ class AuthController extends Controller
       return redirect()->back();
   }
 
+  public function postReset(Request $request)
+  {
+      /*$this->validate($request, [
+              'password' => 'required|confirmed',
+      ]);*/
+      $this->validate($request, [
+          'email' => 'required|email',
+          'password' => 'required|confirmed|min:6',
+          'password_confirmation' => 'required|confirmed|min:6',
+      ]);
+      $credentials = $request->only(
+              'email', 'password', 'password_confirmation'
+      );
+      $user = \Auth::user();
+      $user->password = bcrypt($credentials['password']);
+      $user->save();
+      return redirect('user/'.$user->id);
+  }
+
   public function getLogout()
   {
       Auth::logout();

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b16de00485fd53ae508682888eb6cbb7",
-    "content-hash": "f5c523fb13f148049355a6b579e2612b",
+    "hash": "1e7a1be9ca56aefec10262cd1118c438",
+    "content-hash": "40b6b6ffda35271312148e2fbed75638",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1256,6 +1256,56 @@
                 "uuid"
             ],
             "time": "2016-08-02 18:39:32"
+        },
+        {
+            "name": "schuppo/password-strength",
+            "version": "1.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/schuppo/PasswordStrengthPackage.git",
+                "reference": "1d0820c2fcab646ebfded4b51cd220bb17de3da3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/schuppo/PasswordStrengthPackage/zipball/1d0820c2fcab646ebfded4b51cd220bb17de3da3",
+                "reference": "1d0820c2fcab646ebfded4b51cd220bb17de3da3",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.0",
+                "illuminate/translation": "^5.1",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "illuminate/validation": "~5.0",
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Schuppo\\PasswordStrength": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oliver Schupp",
+                    "email": "oliver.schupp@yahoo.de"
+                }
+            ],
+            "description": "This package provides a validator for ensuring strong passwords in Laravel 4 applications.",
+            "keywords": [
+                "laravel",
+                "laravel 5",
+                "laravel5",
+                "password",
+                "password strength",
+                "validation"
+            ],
+            "time": "2016-09-01 10:10:05"
         },
         {
             "name": "swiftmailer/swiftmailer",
