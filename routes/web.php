@@ -55,3 +55,4 @@ Route::get('/Connections', 'ConnectionsController@getConnections');
 Auth::routes();
 
 Route::get('/home', function(){return view('homepage');});
+Route::get('/homepage', function(){return view('homepage');});
