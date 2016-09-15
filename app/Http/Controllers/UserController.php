@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use DateTime;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
@@ -92,7 +93,7 @@ class UserController extends Controller
             $sponsorship_advert->modalRef2 = 'advertModal';
             $sponsorship_advert->modalRef3 = 'is Sponsoring up to';
           }
-          
+
           if ($sponsorship_advert->amount_units == 'amount'){
           	$sponsorship_advert->amount_units = '£';
           	$sponsorship_advert->amount_units_percent = '';
@@ -144,6 +145,27 @@ class UserController extends Controller
             Storage::delete($old_filename);
         }
         return redirect()->route('account');
+    }
+
+    public function postSaveWYSIWYG(Request $request)
+    {
+        $this->validate($request, [
+          'richTextFieldContent' => 'required|max:1000',
+        ]);
+
+        $user = \App\User::where('username','=',Auth::user()->username)->get()->first();
+
+        Storage::disk('uploads')->put($user->username.'/wysiwyg_'.$user->username.'.html', $request['richTextFieldContent']);
+
+        $user->About = $request['richTextFieldContent'];
+        $user->save();
+        Storage::put('wysiwyg_'.$user->username.'.html', $request['richTextFieldContent']);
+
+        return response()->json([
+          'richTextFieldSentBack' => $request['richTextFieldContent'],
+          'message' => 'Description updated successfully!'],
+          200);
+
     }
 
     public function getUserImage($filename)

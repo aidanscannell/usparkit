@@ -56,3 +56,10 @@ Auth::routes();
 
 Route::get('/home', function(){return view('homepage');});
 Route::get('/homepage', function(){return view('homepage');});
+
+//Route::post('/User/WYSIWYG', 'UserController@postSaveWYSIWYG');
+
+Route::post('/wysiwyg', [
+  'uses' => "UserController@postSaveWYSIWYG",
+  'as' => 'wysiwyg',
+]);

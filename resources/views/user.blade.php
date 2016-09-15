@@ -291,7 +291,7 @@
                 @endif
 
               </div>
-              <form action="php_parsers/wysiwygParser.php" name="wysiwyg" id="wysiwyg" method="post" style="display:none">
+              <form action="/User/WYSIWYG" name="wysiwyg" id="wysiwyg" method="post" style="display:none" class="wysiwyg">
                 <div id="wysiwyg_cp" style="padding:8px; width:100%;">
                   <h3> Editor </h3>
                   <p>Use the editor to create your description. Check out some great examples <a href="">here</a>.</p>
@@ -306,8 +306,11 @@
                   <a onClick="iLink()" value="Link" id="Link" class="wysiwygBtn" title="Insert Link">Link</a>
                 </div>
                 <iframe onload="iFrameOn();" name="richTextField" id="richTextField" src="/userz/{{ $user->username }}/wysiwyg_{{ $user->username }}.html" style="border:#000000 1px solid; width:100%; height:300px;"></iframe>
-                <input name="wysiwygBtn" id="wysiwygBtn" class="btn btn-default" type="button" value="Submit Data" onClick="submit_form()"/>
+                <!--<textarea name="richTextField" id="richTextField" style="border:#000000 1px solid; width:100%; height:300px;"></textarea>-->
+                <!--<input name="wysiwygBtn" id="wysiwygBtn" class="btn btn-default" type="submit" value="Submit Data"/>-->
+                <input name="wysiwygBtn" id="wysiwygBtn1" class="btn btn-default" type="button" value="Submit Data"/>
                 <span id="wysiwygStatus"></span>
+                <input type="hidden" name="_token" value="{{ Session::token() }}">
               </form>
             </div>
 
@@ -449,5 +452,10 @@
   </script>
   <script src="/src/js/postAdvert.js" type="text/javascript"></script>
   <script src="/src/js/user.js" type="text/javascript"></script>
+
+  <script>
+    var token = '{{ Session::token() }}';
+    var url = '{{ route('wysiwyg') }}';
+  </script>
 
 @endsection
