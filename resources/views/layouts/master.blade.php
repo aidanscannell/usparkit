@@ -69,8 +69,6 @@
     <script src="/src/bootstrap/js/bootstrap.min.js"></script>
     <!-- bootbox code -->
     <script src="/src/js/bootbox.min.js"></script>
-    <!-- Private messaging js-->
-    <script src="/src/js/messaging.js"></script>
 
     @yield('head')
 </head>
@@ -131,10 +129,6 @@
 
     <!-- Contact form -->
     <script src="/src/plugins/jquery.validate.js"></script>
-
-    <!-- Google Maps javascript -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;signed_in=true"></script>
-    <script type="text/javascript" src="/src/js/google.map.config.js"></script>
 
     <!-- Owl carousel javascript -->
     <script type="text/javascript" src="/src/plugins/owl-carousel/owl.carousel.js"></script>
