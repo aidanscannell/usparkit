@@ -1,6 +1,4 @@
 $('.wysiwyg').find('#wysiwygBtn1').on('click', function(){
-  //event.preventDefault();
-
   var richTextField = window.frames['richTextField'].document.body.innerHTML;
   $.ajax({
     method: 'POST',
@@ -26,8 +24,6 @@ $('.wysiwyg').find('#wysiwygBtn1').on('click', function(){
         console.log(errors);
     }
   })
-
-
   .done(function (msg){
     console.log(JSON.stringify(msg));
     $('#wysiwygData').html(msg['richTextFieldSentBack']);
