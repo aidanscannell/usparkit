@@ -43,6 +43,14 @@ Route::get('/User/{username}', [
     'as' => 'User',
     'middleware' => 'auth'
 ]);
+Route::post('/wysiwyg', [
+  'uses' => "UserController@postSaveWYSIWYG",
+  'as' => 'wysiwyg',
+]);
+Route::post('/Message/Send', [
+  'uses' => "UserController@postSendPM",
+  'as' => 'sendPM',
+]);
 
 // Image Controller Get
 Route::get('resizeImage', 'ImageController@resizeImage');
@@ -57,9 +65,9 @@ Auth::routes();
 Route::get('/home', function(){return view('homepage');});
 Route::get('/homepage', function(){return view('homepage');});
 
-//Route::post('/User/WYSIWYG', 'UserController@postSaveWYSIWYG');
-
-Route::post('/wysiwyg', [
-  'uses' => "UserController@postSaveWYSIWYG",
-  'as' => 'wysiwyg',
+// Messages Controlelr
+Route::get('/Messages/{username}', [
+  'uses' => 'MessageController@getMessages',
+  'as' => 'Messages',
+  'middleware' => 'page.owner',
 ]);
