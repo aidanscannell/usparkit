@@ -88,10 +88,6 @@ class MessageController extends Controller
 
       $message->save();
 
-      //return redirect()->back();
-
-      //return view('homepage');
-
       return response()->json([
         'message' => 'Message sent successfully!'],
         200);

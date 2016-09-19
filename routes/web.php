@@ -11,6 +11,10 @@
 |
 */
 
+Auth::routes();
+Route::get('/home', function(){return view('homepage');});
+Route::get('/homepage', function(){return view('homepage');});
+
 // Get Un-Authenticated Pages
 Route::get('/', function(){return view('homepage');})->name('homepage');
 Route::get('/How-It-Works', function(){return view('how-it-works');});
@@ -37,7 +41,6 @@ Route::post('/Log-In', [
 ]);
 
 // User Controller Get
-//Route::get('/User/{username}', 'UserController@getUser');
 Route::get('/User/{username}', [
     'uses' => 'UserController@getUser',
     'as' => 'User',
@@ -60,17 +63,13 @@ Route::post('resizeImagePost',['as'=>'resizeImagePost','uses'=>'ImageController@
 // Connections Controller Get
 Route::get('/Connections', 'ConnectionsController@getConnections');
 
-Auth::routes();
-
-Route::get('/home', function(){return view('homepage');});
-Route::get('/homepage', function(){return view('homepage');});
-
-// Messages Controller
+// Messages Controller Get
 Route::get('/Messages/{username}', [
   'uses' => 'MessageController@getMessages',
   'as' => 'Messages',
   'middleware' => 'page.owner',
 ]);
+// Messages Controller Post
 Route::post('/Message/Post', [
   'uses' => "MessageController@postSendMsg",
   'as' => 'sendMsg',
