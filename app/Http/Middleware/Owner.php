@@ -16,9 +16,12 @@ class Owner
      */
     public function handle($request, Closure $next)
     {
-        if ($request->username == Auth::user()->username){
-          return $next($request);
+        if (Auth::guard()->check()) {
+          if ($request->username == Auth::user()->username){
+            return $next($request);
+          }
         }
+
         return redirect()->to('/');
     }
 }
