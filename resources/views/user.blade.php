@@ -71,23 +71,24 @@
             					<div class="row">
             						<div class="col-md-6">
             							<a href="/User/{{ $sponsorship_advert->user }}"><img  src="/userz/{{ $sponsorship_advert->username }}/{{ $sponsorship_advert->avatar }}" alt=""></a>
-            							<div id="statusui">
+            							<div id="statusui{{ $sponsorship_advert->advert_id }}">
 
                             <div class="comments-form">
                           		<h4 class="title">Send a Private Message</h4>
-                          		<form id="form" name="form" method="post" class="form" role="form" action="[[~[[*id]]]]" enctype="multipart/form-data">
+                          		<form id="form{{ $sponsorship_advert->advert_id }}" name="form{{ $sponsorship_advert->advert_id }}" class="form" role="form" enctype="multipart/form-data">
                           	     <div class="form-group has-feedback">
                           				<label for="subject1">Subject</label>
-                          				<input class="form-control" rows="8" id="subject{{ $sponsorship_advert->advert_id }}" placeholder="" onkeyup="statusMax(this,50)" required>
+                          				<input class="form-control" rows="8" name="subject" id="subject" placeholder=""  required>
                           				<i class="fa fa-navicon form-control-feedback"></i>
                           			</div>
                           			<div class="form-group has-feedback">
                           				<label for="message1">Message</label>
-                          				<textarea class="form-control" rows="3" id="message{{ $sponsorship_advert->advert_id }}" placeholder="" onkeyup="statusMax(this,300)" required></textarea>
+                          				<textarea class="form-control" rows="3" name="message" id="message" placeholder=""  required></textarea>
                           				<i class="fa fa-envelope-o form-control-feedback"></i>
                           			</div>
-                          			<button id="btn{{ $sponsorship_advert->advert_id }}" type="button" class="btn btn-default" onclick="postPm('{{ $sponsorship_advert->username }}','{{ Auth::user()->username }}','subject{{ $sponsorship_advert->advert_id }}','message{{ $sponsorship_advert->advert_id }}','btn{{ $sponsorship_advert->advert_id }}')">Post</button>
-                          		</form>
+                          			<button id="pmBtn" name="pmBtn{{ $sponsorship_advert->advert_id }}" class="btn btn-default" >Post</button>
+                                {{ csrf_field() }}
+                              </form>
                           	</div>
 
             							</div>
@@ -324,18 +325,18 @@
               <div id="privateMessageForm" style="display:none;">
                   <div class="center-block p-30 light-gray-bg border-clear "><div class="comments-form">
                     <h2 class="title">Send a Private Message</h2>
-                    <form id="form" name="form" method="post" class="form" role="form" action="[[~[[*id]]]]" enctype="multipart/form-data">
+                    <form id="form" name="form" method="post" class="form" role="form" action="/Message/Send" enctype="multipart/form-data">
               		    <div class="form-group has-feedback">
                         <label for="subject1">Subject</label>
-                        <input class="form-control" rows="8" id="subject1" placeholder="" onkeyup="statusMax(this,50)" required>
+                        <input class="form-control" rows="8" id="subject1" placeholder="" required>
                         <i class="fa fa-navicon form-control-feedback"></i>
                       </div>
                       <div class="form-group has-feedback">
                         <label for="message1">Message</label>
-                        <textarea class="form-control" rows="8" id="message1" placeholder="" onkeyup="statusMax(this,300)" required></textarea>
+                        <textarea class="form-control" rows="8" id="message1" placeholder="" required></textarea>
                         <i class="fa fa-envelope-o form-control-feedback"></i>
                       </div>
-                      <button id="pmBtn" type="button" class="btn btn-default" onclick="postPm(\''.$pageOwner->username.'\',\''.$user->username.'\',\'subject1\',\'message1\')">Post</button>
+                      <button id="pmBtn" type="submit" class="btn btn-default">Post</button>
                     </form>
                   </div>
                 </div>

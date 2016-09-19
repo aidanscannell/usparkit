@@ -65,9 +65,13 @@ Auth::routes();
 Route::get('/home', function(){return view('homepage');});
 Route::get('/homepage', function(){return view('homepage');});
 
-// Messages Controlelr
+// Messages Controller
 Route::get('/Messages/{username}', [
   'uses' => 'MessageController@getMessages',
   'as' => 'Messages',
   'middleware' => 'page.owner',
+]);
+Route::post('/Message/Post', [
+  'uses' => "MessageController@postSendMsg",
+  'as' => 'sendMsg',
 ]);

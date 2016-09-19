@@ -5,6 +5,7 @@ use App\User;
 use App\Display;
 use App\Photos;
 use App\SponsorshipAdvert;
+use App\pm_inbox;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use DateTime;
 use Illuminate\Http\RedirectResponse;
+
+use App\Http\Requests;
 
 class UserController extends Controller
 {
@@ -63,12 +66,6 @@ class UserController extends Controller
           $friendsLogic = \DB::select('select * from users where '.$orLogic.'');
         }
 
-        // WYSIWYG
-        /*$sponsorshipAdvert = \App\SponsorshipAdvert::where('deletedAdvert', '=', '0')
-                                                            ->where('user', '=', $pageOwner->username)
-                                                            ->orderBy('senttime', 'desc')
-                                                            ->get();*/
-
         $sponsorship_adverts = \DB::table('sponsorship_adverts')->leftJoin('users', 'user', '=', 'username')
                                                   ->where('user','=',$pageOwner->username)
                                                   ->where('deletedAdvert','=','0')
@@ -112,11 +109,6 @@ class UserController extends Controller
           'oFriends' => $oFriends,
           'sponsorship_adverts' => $sponsorship_adverts,
         ]);
-    }
-
-    public function getAccount()
-    {
-        return view('account', ['user' => Auth::user()]);
     }
 
     public function postSaveAccount(Request $request)
@@ -165,6 +157,38 @@ class UserController extends Controller
           'richTextFieldSentBack' => $request['richTextFieldContent'],
           'message' => 'Description updated successfully!'],
           200);
+
+    }
+
+    public function postSendPM(Request $request)
+    {
+        $this->validate($request, [
+          'Subject' => 'required|max:1',
+          'Message' => 'required|max:4000',
+        ]);
+
+        /*$now = new DateTime();
+        $inbox = new Pm_inbox;
+        $inbox->receiver = 'hi';
+        $inbox->sender = 'hi';
+        $inbox->senttime = $now;
+        $inbox->subject = 'hi';
+        $inbox->message = 'hi';
+        // $inbox->sdelete = 'hi';
+        // $inbox->rdelete = 'hi';
+        $inbox->parent = 'hi';
+        // $inbox->hasreplies = 'hi';
+        // $inbox->rread = 'hi';
+        //$inbox->sread = 'hi';
+        //$inbox->messageID = 'hi';
+
+        $inbox->save();*/
+
+        return response()->json([
+          'message' => 'Message sent successfully!'],
+          200);
+
+
 
     }
 
