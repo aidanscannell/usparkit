@@ -25,7 +25,7 @@ class MessageController extends Controller
                                           ->where('sdelete','=','0')
                                           ->where('parent','=','x')
                                           ->where('hasreplies','=','1')
-                                          //->orderBy('created_at', 'DESC')
+                                          ->orderBy('senttime', 'DESC')
                                           ->get();
 
         // Gather message user received
@@ -33,7 +33,7 @@ class MessageController extends Controller
                                           ->where('receiver','=',$user->username)
                                           ->where('parent','=','x')
                                           ->where('rdelete','=','0')
-                                          //->orderBy('created_at', 'DESC')
+                                          ->orderBy('senttime', 'DESC')
                                           ->get();
 
         // Gather replies to messages user received
@@ -41,7 +41,7 @@ class MessageController extends Controller
                                           ->where('parent','=','0')
                                           ->where('rdelete','=','0')
                                           ->where('sdelete','=','0')
-                                          //->orderBy('created_at', 'ASC')
+                                          ->orderBy('senttime', 'ASC')
                                           ->get();
 
         // Gather replies to messages user sent
@@ -49,7 +49,7 @@ class MessageController extends Controller
                                           ->where('parent','=','0')
                                           ->where('rdelete','=','0')
                                           ->where('sdelete','=','0')
-                                          //->orderBy('created_at', 'ASC')
+                                          ->orderBy('senttime', 'ASC')
                                           ->get();
 
         return view('inbox', [

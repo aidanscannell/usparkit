@@ -92,7 +92,7 @@
         								<div class="comment-meta">
                           From
                           <a href="/User/{{ $message->sender }}">{{ $message->sender }}</a>
-                          | {{ $message->created_at }}
+                          | {{ $message->senttime }}
                         </div>
         							</header>
         							<div class="comment-content">
@@ -117,7 +117,7 @@
                                 @endif
                     					</div>
                     					<header>
-                    						<div class="comment-meta">From <a href="/User/{{ $reply->sender }}">{{ $reply->sender}}</a> | {{ $reply->created_at }}</div>
+                    						<div class="comment-meta">From <a href="/User/{{ $reply->sender }}">{{ $reply->sender}}</a> | {{ $reply->senttime }}</div>
                     					</header>
                     					<div class="comment-content">
                     						<div class="comment-body clearfix">
@@ -163,7 +163,7 @@
                         <div class="comment-meta">
                           To
                           <a href="/User/{{ $message->receiver }}">{{ $message->receiver }}</a>
-                          | {{ $message->created_at }}
+                          | {{ $message->senttime }}
                         </div>
                       </header>
                       <div class="comment-content">
@@ -188,7 +188,7 @@
                                 @endif
                               </div>
                               <header>
-                                <div class="comment-meta">From <a href="/User/{{ $reply->sender }}">{{ $reply->sender}}'.$reply_sender_space.'</a> | {{ $reply->created_at }}</div>
+                                <div class="comment-meta">From <a href="/User/{{ $reply->sender }}">{{ $reply->sender}}'.$reply_sender_space.'</a> | {{ $reply->senttime }}</div>
                               </header>
                               <div class="comment-content">
                                 <div class="comment-body clearfix">
