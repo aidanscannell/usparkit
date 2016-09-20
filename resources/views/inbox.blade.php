@@ -235,7 +235,7 @@
     <script src="/src/js/inbox.js" type="text/javascript"></script>
 
     <script>
-      var url = '{{ route('sendMsg') }}';
+      var url = '{{ route('sendMsgTo') }}';
       var token = '{{ Session::token() }}';
     </script>
 

@@ -79,9 +79,11 @@ class MessageController extends Controller
         'message' => 'required|max:5000',
       ]);
 
+      $datetime = new DateTime();
       $message = new pm_inbox;
       $message->receiver = $request['recipient'];
       $message->sender = Auth::user()->username;
+      $message->senttime = $datetime;
       $message->subject = $request['subject'];
       $message->message = $request['message'];
       $message->parent = 'x';

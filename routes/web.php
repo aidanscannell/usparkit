@@ -60,6 +60,10 @@ Route::post('/Message/Send', [
   'uses' => "UserController@postSendPM",
   'as' => 'sendPM',
 ]);
+Route::post('/Message/Post', [
+  'uses' => "MessageController@postSendMsg",
+  'as' => 'sendMsg',
+]);
 
 // Image Controller Get
 Route::get('resizeImage', 'ImageController@resizeImage');
@@ -78,5 +82,5 @@ Route::get('/Messages/{username}', [
 // Messages Controller Post
 Route::post('/Message/Post', [
   'uses' => "MessageController@postSendMsg",
-  'as' => 'sendMsg',
+  'as' => 'sendMsgTo',
 ]);
