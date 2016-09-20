@@ -173,36 +173,30 @@ class UserController extends Controller
 
     public function postSelectPic(Request $request)
     {
-
       // Select all photos id for validation of recipient
       $photosID = \App\Photos::select('id')->get();
-      // Create username string
       $string = '';
       foreach($photosID as $photoID){
         $string .= $photoID->id.',';
       }
-      //return $string;
-
       $this->validate($request, [
         'id' => 'required|numeric|in:'.$string.'',
       ]);
-
       // Set avatar in users table
-      $newProfile = \App\Photos::where('id', '=',$request['id'])->get()->first();
+      $newProfile = \App\Photos::where('id', '=',$request['id'])
+                                  ->where('user','=',Auth::user()->username)
+                                  ->get()->first();
       $users = \App\User::where('username','=',Auth::user()->username)->first();
       $users->avatar = $newProfile['filename'];
       $users->save();
-
       // Set the old avatar to not be avatar in photos table
-      $oldProfile = \App\Photos::where('avatar','=','1')->first();
+      $oldProfile = \App\Photos::where('avatar','=','1')->where('user','=',Auth::user()->username)->first();
       $oldProfile->avatar = '0';
       $oldProfile->save();
-
       // Set the new avatar to be the avatar in the photos table
       $newProfile = \App\Photos::find($request['id']);
       $newProfile->avatar = '1';
       $newProfile->save();
-
       // If AJAX was used return message using json
       if($request->ajax()){
         return response()->json([
@@ -211,10 +205,59 @@ class UserController extends Controller
           'message' => 'Profile Picture Changed Successfully!'],
           200);
       }
-
       // Redirect with message if HTTP (Javescript turned off)
       return redirect()->back()->with('message', 'Profile Picture Changed Successfully!');
+    }
 
+    public function postDeletePic(Request $request)
+    {
+      // Select all photos id for validation of recipient
+      $photosID = \App\Photos::select('id')->get();
+      $string = '';
+      foreach($photosID as $photoID){
+        $string .= $photoID->id.',';
+      }
+      $this->validate($request, [
+        'id' => 'required|numeric|in:'.$string.'',
+      ]);
+
+      // Select the photo to delete
+      $image = \App\Photos::where('id', '=',$request['id'])->where('user','=',Auth::user()->username)->get()->first();
+      $fileToDelete = $image->filename;
+
+      // Count the number of images the user has
+      $imagesCount = \App\Photos::where('user','=',Auth::user()->username)->count();
+
+      // If the image being deleted is the profile picture and there are more photos asign a new profile picture
+      if($image->avatar == 1 && $imagesCount > 1){
+        // Set an avatar in the photos table
+        $newProfile = \App\Photos::where('user','=', Auth::user()->username)
+                                  ->where('avatar','=', '0')->first();
+        $newProfile->avatar = '1';
+        $newProfile->save();
+
+        $users = \App\User::where('username','=',Auth::user()->username)->first();
+        $users->avatar = $newProfile['filename'];
+        $users->save();
+      }
+
+      // Delete image files in userz folder
+      File::delete('userz/'.Auth::user()->username.'/' . $image->filename);
+      File::delete('userz/'.Auth::user()->username.'/' . 'thumb_'.$image->filename);
+      File::delete('userz/'.Auth::user()->username.'/' . 'resized_'.$image->filename);
+
+      // Delete the old image row from photos table
+      $image = \App\Photos::where('id', '=',$request['id'])->where('user','=',Auth::user()->username)->delete();
+
+      // If AJAX was used return message using json
+      if($request->ajax()){
+        return response()->json([
+          'filename' => $fileToDelete,
+          'message' => 'Picture Deleted Successfully!'],
+          200);
+      }
+      // Redirect with message if HTTP (Javescript turned off)
+      return redirect()->back()->with('message', 'Picture Deleted Successfully!');
     }
 
     public function getUserImage($filename)

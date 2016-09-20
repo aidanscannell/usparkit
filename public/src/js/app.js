@@ -164,10 +164,46 @@ $('#modalListSelect').find('[name=selectLink]').on('click', function(e){
     }
   })
   .done(function (msg){
-    var message = '<div class="row"><div class="alert alert-success"><li>';
+    var message = '<div class="row" style="padding-left:20px;padding-right:20px;"><div class="alert alert-success"><li>';
     message += msg['message'];
     message += '</li></div></div>';
     $('#selectPicStatus').show().html(message); //this is my div with messages
     $('#profilePicture').attr("src", ('/userz/'+msg['username']+'/'+msg['filename']));
+  });
+});
+
+// AJAX for delete picture on user page
+$('#modalListDelete').find('[name=deleteLink]').on('click', function(e){
+  e.preventDefault();
+  var id = this.id.slice(10);
+  $.ajax({
+    method: 'POST',
+    url: url4,
+    data: {id: id, _token: token},
+    dataType: 'json',
+    success: function(msg)
+    {
+        var message = '<div class="row"><div class="alert alert-success"><li>';
+        message += msg['message'];
+        message += '</li></div></div>';
+        $('#deletePicStatus').show().html(message); //this is my div with messages
+    },
+    error: function(data,msg)
+    {
+        var errors = '<div class="row"><div class="alert alert-danger">';
+        for(datos in data.responseJSON){
+            errors += '<li>'+data.responseJSON[datos] + '</li>';
+        }
+        errors += '</div></div>';
+        $('#deletePicStatus').show().html(errors); //this is my div with messages
+    }
+  })
+  .done(function (msg){
+    var message = '<div class="row" style="padding-left:20px;padding-right:20px;"><div class="alert alert-success"><li>';
+    message += msg['message'];
+    message += '</li></div></div>';
+    $('#deletePicStatus').show().html(message); //this is my div with messages
+    $('#deleteDiv'+id).hide();
+    // $('#image'+msg['filename']).hide();
   });
 });

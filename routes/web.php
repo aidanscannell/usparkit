@@ -68,6 +68,10 @@ Route::post('/Picture/Select', [
   'uses' => "UserController@postSelectPic",
   'as' => 'selectPic',
 ]);
+Route::post('/Picture/Delete', [
+  'uses' => "UserController@postDeletePic",
+  'as' => 'deletePic',
+]);
 
 // Image Controller Get
 Route::get('resizeImage', 'ImageController@resizeImage');

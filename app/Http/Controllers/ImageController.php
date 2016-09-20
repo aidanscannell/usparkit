@@ -54,8 +54,6 @@ class ImageController extends Controller
           $destinationPath = public_path('/userz/'.$username);
           $image->move($destinationPath, $input['imagename']);
 
-          //$this->postImage->add($input);
-
           $photos = new Photos;
           $photos->filename = $input['imagename'];
           $photos->user = $username;
@@ -63,7 +61,6 @@ class ImageController extends Controller
           $photos->avatar = 1;
           $photos->save();
 
-          return back()
-            ->with('message','Image Upload successful');
+          return back()->with('message','Image Uploaded Successfully!');
     }
 }

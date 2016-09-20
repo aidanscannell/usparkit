@@ -123,7 +123,7 @@
           <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12" style="padding-bottom:10px;">
             <div class="center-block p-20 light-gray-bg">
               <div class="owl-carousel content-slider-with-controls">
-                <div class="overlay-container overlay-visible">
+                <div class="overlay-container overlay-visible" id="image{{ $pageOwner->avatar }}">
       						<img src="/userz/{{ $pageOwner->username }}/{{ $pageOwner->avatar }}" id="profilePicture"  alt="">
       						<div class=" hidden-xs">
       							<div class="text">
@@ -135,15 +135,17 @@
 
                 <!-- START of PHOTOS MODAL -->
                 @foreach($photos as $photo)
-                  <div class="overlay-container overlay-visible">
-          						<img src="/userz/{{ $pageOwner->username }}/{{ $photo->filename }}"  alt="">
-          						<div class=" hidden-xs">
-          							<div class="text">
-          								<p>{{ $photo->gallery }}</p>
-          							</div>
-          						</div>
-          						<a href="/userz/{{ $pageOwner->username }}/{{ $photo->filename }}" class="popup-img overlay-link" title="{{ $photo->gallery }}"><i class="icon-plus-1"></i></a>
-          					</div>
+                  @if($photo->filename != $pageOwner->avatar)
+                  <div class="overlay-container overlay-visible" id="image{{ $pageOwner->avatar }}">
+            						<img src="/userz/{{ $pageOwner->username }}/{{ $photo->filename }}"  alt="">
+            						<div class=" hidden-xs">
+            							<div class="text">
+            								<p>{{ $photo->gallery }}</p>
+            							</div>
+            						</div>
+            						<a href="/userz/{{ $pageOwner->username }}/{{ $photo->filename }}" class="popup-img overlay-link" title="{{ $photo->gallery }}"><i class="icon-plus-1"></i></a>
+            					</div>
+                    @endif
                 @endforeach
               </div>
 
@@ -174,7 +176,7 @@
                               <a onclick="toggleSelectDelete('modalListSelect','modalListDelete')">Select a profile picture</a>
                               <div id="modalListSelect" style="display:none;">
                                 @foreach($photos as $photo)
-                                  <div class="col-md-4 col-sm-4 col-xs-4">
+                                  <div class="col-md-4 col-sm-4 col-xs-4" id="selectDiv{{ $photo->id }}">
             												<div class="overlay-container overlay-visible">
             													<img src="/userz/{{ $pageOwner->username }}/thumb_{{ $photo->filename }}"  alt="">
             													<a id="selectlink{{ $photo->id }}" name="selectLink" value="Select"/>Select</a>
@@ -184,10 +186,10 @@
                               </div>
                               <div id="modalListDelete" style="display:none;">
                                 @foreach($photos as $photo)
-                                  <div class="col-md-4 col-sm-4 col-xs-4">
+                                  <div class="col-md-4 col-sm-4 col-xs-4" id="deleteDiv{{ $photo->id }}">
             												<div class="overlay-container overlay-visible">
             													<img src="/userz/{{ $pageOwner->username }}/thumb_{{$photo->filename }}"  alt="">
-            													<a id="deletelink" onclick="return false;"  onmousedown="deletePhoto('{{ $photo->id }}')" value="Delete"/>Delete</a>
+            													<a id="deletelink{{ $photo->id }}" name="deleteLink" value="Delete"/>Delete</a>
             												</div>
             											</div>
                                 @endforeach
@@ -472,6 +474,7 @@
     var url = '{{ route('wysiwyg') }}';
     var url2 = '{{ route('sendMsg') }}';
     var url3 = '{{ route('selectPic') }}';
+    var url4 = '{{ route('deletePic') }}';
   </script>
 
 @endsection
