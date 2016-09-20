@@ -124,7 +124,7 @@
             <div class="center-block p-20 light-gray-bg">
               <div class="owl-carousel content-slider-with-controls">
                 <div class="overlay-container overlay-visible">
-      						<img src="/userz/{{ $pageOwner->username }}/{{ $pageOwner->avatar }}"  alt="">
+      						<img src="/userz/{{ $pageOwner->username }}/{{ $pageOwner->avatar }}" id="profilePicture"  alt="">
       						<div class=" hidden-xs">
       							<div class="text">
       								<p></p>
@@ -177,7 +177,7 @@
                                   <div class="col-md-4 col-sm-4 col-xs-4">
             												<div class="overlay-container overlay-visible">
             													<img src="/userz/{{ $pageOwner->username }}/thumb_{{ $photo->filename }}"  alt="">
-            													<a id="selectlink{{ $photo->id }}" onclick="selectPhoto('{{ $photo->id }}')" value="Select"/>Select</a>
+            													<a id="selectlink{{ $photo->id }}" name="selectLink" value="Select"/>Select</a>
             												</div>
             											</div>
                                 @endforeach
@@ -197,6 +197,8 @@
               					</div>
               				</div>
               				<div class="modal-footer">
+                        <span id="selectPicStatus" style="text-align:left;"></span>
+                        <span id="deletePicStatus" style="text-align:left;"></span>
               					<button type="button" class="btn btn-sm btn-dark" data-dismiss="modal">Close</button>
               				</div>
               			</div>
@@ -469,6 +471,7 @@
     var token = '{{ Session::token() }}';
     var url = '{{ route('wysiwyg') }}';
     var url2 = '{{ route('sendMsg') }}';
+    var url3 = '{{ route('selectPic') }}';
   </script>
 
 @endsection

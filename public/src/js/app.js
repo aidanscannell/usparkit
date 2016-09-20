@@ -136,3 +136,38 @@ $('#pmForm').find('#pmBtn').on('click', function(e){
     $('#pmFormStatus').show().html(message); //this is my div with messages
   });
 });
+
+// AJAX for select profile picture on user page
+$('#modalListSelect').find('[name=selectLink]').on('click', function(e){
+  e.preventDefault();
+  var id = this.id.slice(10);
+  $.ajax({
+    method: 'POST',
+    url: url3,
+    data: {id: id, _token: token},
+    dataType: 'json',
+    success: function(msg)
+    {
+        var message = '<div class="row"><div class="alert alert-success"><li>';
+        message += msg['message'];
+        message += '</li></div></div>';
+        $('#selectPicStatus').show().html(message); //this is my div with messages
+    },
+    error: function(data,msg)
+    {
+        var errors = '<div class="row"><div class="alert alert-danger">';
+        for(datos in data.responseJSON){
+            errors += '<li>'+data.responseJSON[datos] + '</li>';
+        }
+        errors += '</div></div>';
+        $('#selectPicStatus').show().html(errors); //this is my div with messages
+    }
+  })
+  .done(function (msg){
+    var message = '<div class="row"><div class="alert alert-success"><li>';
+    message += msg['message'];
+    message += '</li></div></div>';
+    $('#selectPicStatus').show().html(message); //this is my div with messages
+    $('#profilePicture').attr("src", ('/userz/'+msg['username']+'/'+msg['filename']));
+  });
+});

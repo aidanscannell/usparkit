@@ -64,6 +64,10 @@ Route::post('/Message/Send', [
   'uses' => "MessageController@postSendMsg",
   'as' => 'sendMsg',
 ]);
+Route::post('/Picture/Select', [
+  'uses' => "UserController@postSelectPic",
+  'as' => 'selectPic',
+]);
 
 // Image Controller Get
 Route::get('resizeImage', 'ImageController@resizeImage');
