@@ -78,18 +78,18 @@
                           		<form id="form{{ $sponsorship_advert->advert_id }}" name="form{{ $sponsorship_advert->advert_id }}" method="post" action="/Message/Send" class="form" role="form" enctype="multipart/form-data">
                           	     <div class="form-group has-feedback">
                           				<label for="subject">Subject</label>
-                          				<input class="form-control" rows="8" name="subject" id="subject" placeholder=""  required>
+                          				<input class="form-control" rows="8" name="subject" id="{{ $sponsorship_advert->advert_id }}Subject" placeholder=""  required>
                           				<i class="fa fa-navicon form-control-feedback"></i>
                           			</div>
                           			<div class="form-group has-feedback">
                           				<label for="message">Message</label>
-                          				<textarea class="form-control" rows="3" name="message" id="message" placeholder=""  required></textarea>
+                          				<textarea class="form-control" rows="3" name="message" id="{{ $sponsorship_advert->advert_id }}Message" placeholder=""  required></textarea>
                           				<i class="fa fa-envelope-o form-control-feedback"></i>
                           			</div>
                           			<button id="pmBtn" name="pmBtn{{ $sponsorship_advert->advert_id }}" class="btn btn-default" type="submit">Post</button>
                                 {{ csrf_field() }}
-                                <input type="hidden" name="recipient" id="recipient" value="{{ $pageOwner->username }}">
-                                <span id="advertModalStatus"></span>
+                                <input type="hidden" name="recipient" id="{{ $sponsorship_advert->advert_id }}Recipient" value="{{ $pageOwner->username }}">
+                                <span id="advertModalStatus{{ $sponsorship_advert->advert_id }}"></span>
                               </form>
                           	</div>
 
@@ -325,24 +325,28 @@
               @endif
               <!-- START of PM or ADVERT FORM -->
               <div id="privateMessageForm" style="display:none;">
-                  <div class="center-block p-30 light-gray-bg border-clear "><div class="comments-form">
+                <div class="center-block p-30 light-gray-bg border-clear ">
+                  <div class="comments-form">
                     <h2 class="title">Send a Private Message</h2>
-                    <form id="form" name="form" method="post" class="form" role="form" action="/Message/Send" enctype="multipart/form-data">
+                    <form id="messagingFormMain" name="messagingFormMain" method="post" action="/Message/Send"  class="form" role="form"  enctype="multipart/form-data">
               		    <div class="form-group has-feedback">
                         <label for="subject1">Subject</label>
-                        <input class="form-control" rows="8" id="subject1" placeholder="" required>
+                        <input class="form-control" rows="8" id="mainSubject" name="subject" placeholder="" required>
                         <i class="fa fa-navicon form-control-feedback"></i>
                       </div>
                       <div class="form-group has-feedback">
                         <label for="message1">Message</label>
-                        <textarea class="form-control" rows="8" id="message1" placeholder="" required></textarea>
+                        <textarea class="form-control" rows="8" id="mainMessage" name="message" placeholder="" required></textarea>
                         <i class="fa fa-envelope-o form-control-feedback"></i>
                       </div>
-                      <button id="pmBtn" type="submit" class="btn btn-default">Post</button>
+                      <button id="mainPmBtn" name="mainPmBtn" type="submit" class="btn btn-default">Post</button>
+                      {{ csrf_field() }}
+                      <input type="hidden" name="recipient" id="mainRecipient" value="{{ $pageOwner->username }}">
                     </form>
                   </div>
                 </div>
               </div>
+
               @include('includes.sponsorshipAdvertModal')
               <!-- breakkkk -->
               @include('includes.sponsorshipRequestModal')

@@ -99,7 +99,7 @@ class MessageController extends Controller
 
       // Redirect with message if HTTP (Javescript turned off)
       return redirect()->back()->with('message', 'Message sent successfully!');
-      
+
     }
 
     public function postSendMsg(Request $request)
@@ -136,6 +136,7 @@ class MessageController extends Controller
       // If AJAX was used return message using json
       if($request->ajax()){
         return response()->json([
+          'id' => $request['id'],
           'message' => 'Message sent successfully!'],
           200);
       }
