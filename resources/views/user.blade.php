@@ -73,25 +73,29 @@
             							<a href="/User/{{ $sponsorship_advert->user }}"><img  src="/userz/{{ $sponsorship_advert->username }}/{{ $sponsorship_advert->avatar }}" alt=""></a>
             							<div id="statusui{{ $sponsorship_advert->advert_id }}">
 
-                            <div class="comments-form">
-                          		<h4 class="title">Send a Private Message</h4>
-                          		<form id="form{{ $sponsorship_advert->advert_id }}" name="form{{ $sponsorship_advert->advert_id }}" method="post" action="/Message/Send" class="form" role="form" enctype="multipart/form-data">
-                          	     <div class="form-group has-feedback">
-                          				<label for="subject">Subject</label>
-                          				<input class="form-control" rows="8" name="subject" id="{{ $sponsorship_advert->advert_id }}Subject" placeholder=""  required>
-                          				<i class="fa fa-navicon form-control-feedback"></i>
-                          			</div>
-                          			<div class="form-group has-feedback">
-                          				<label for="message">Message</label>
-                          				<textarea class="form-control" rows="3" name="message" id="{{ $sponsorship_advert->advert_id }}Message" placeholder=""  required></textarea>
-                          				<i class="fa fa-envelope-o form-control-feedback"></i>
-                          			</div>
-                          			<button id="pmBtn" name="pmBtn{{ $sponsorship_advert->advert_id }}" class="btn btn-default" type="submit">Post</button>
-                                {{ csrf_field() }}
-                                <input type="hidden" name="recipient" id="{{ $sponsorship_advert->advert_id }}Recipient" value="{{ $pageOwner->username }}">
-                                <span id="advertModalStatus{{ $sponsorship_advert->advert_id }}"></span>
-                              </form>
-                          	</div>
+                            @if(Auth::user()->username != $pageOwner->username)
+                              <div class="comments-form">
+                            		<h4 class="title">Send a Private Message</h4>
+                            		<form id="form{{ $sponsorship_advert->advert_id }}" name="form{{ $sponsorship_advert->advert_id }}" method="post" action="/Message/Send" class="form" role="form" enctype="multipart/form-data">
+                            	     <div class="form-group has-feedback">
+                            				<label for="subject">Subject</label>
+                            				<input class="form-control" rows="8" name="subject" id="{{ $sponsorship_advert->advert_id }}Subject" placeholder=""  required>
+                            				<i class="fa fa-navicon form-control-feedback"></i>
+                            			</div>
+                            			<div class="form-group has-feedback">
+                            				<label for="message">Message</label>
+                            				<textarea class="form-control" rows="3" name="message" id="{{ $sponsorship_advert->advert_id }}Message" placeholder=""  required></textarea>
+                            				<i class="fa fa-envelope-o form-control-feedback"></i>
+                            			</div>
+                            			<button id="pmBtn" name="pmBtn{{ $sponsorship_advert->advert_id }}" class="btn btn-default" type="submit">Post</button>
+                                  {{ csrf_field() }}
+                                  <input type="hidden" name="recipient" id="{{ $sponsorship_advert->advert_id }}Recipient" value="{{ $pageOwner->username }}">
+                                  <span id="advertModalStatus{{ $sponsorship_advert->advert_id }}"></span>
+                                </form>
+                            	</div>
+                            @else
+                              <h4 class="title">Your Sponsorship Advert (Edit)</h4>
+                            @endif
 
             							</div>
             						</div>
@@ -294,7 +298,7 @@
                 @endif
 
               </div>
-              <form action="/User/WYSIWYG" name="wysiwyg" id="wysiwyg" method="post" style="display:none" class="wysiwyg">
+              <form action="/wysiwyg" name="wysiwyg" id="mainWysiwyg" method="post" style="display:none" class="wysiwyg">
                 <div id="wysiwyg_cp" style="padding:8px; width:100%;">
                   <h3> Editor </h3>
                   <p>Use the editor to create your description. Check out some great examples <a href="">here</a>.</p>
@@ -311,7 +315,7 @@
                 <iframe onload="iFrameOn();" name="richTextField" id="richTextField" src="/userz/{{ $user->username }}/wysiwyg_{{ $user->username }}.html" style="border:#000000 1px solid; width:100%; height:300px;"></iframe>
                 <!--<textarea name="richTextField" id="richTextField" style="border:#000000 1px solid; width:100%; height:300px;"></textarea>-->
                 <!--<input name="wysiwygBtn" id="wysiwygBtn" class="btn btn-default" type="submit" value="Submit Data"/>-->
-                <input name="wysiwygBtn" id="wysiwygBtn1" class="btn btn-default" type="button" value="Submit Data"/>
+                <input name="wysiwygBtn" id="mainWysiwygBtn" class="btn btn-default" type="submit" value="Submit Data"/>
                 <span id="wysiwygStatus"></span>
                 <input type="hidden" name="_token" value="{{ Session::token() }}">
               </form>
@@ -342,6 +346,7 @@
                       <button id="mainPmBtn" name="mainPmBtn" type="submit" class="btn btn-default">Post</button>
                       {{ csrf_field() }}
                       <input type="hidden" name="recipient" id="mainRecipient" value="{{ $pageOwner->username }}">
+                      <span id="mainPmStatus"></span>
                     </form>
                   </div>
                 </div>

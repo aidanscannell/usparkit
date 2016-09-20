@@ -142,21 +142,32 @@ class UserController extends Controller
     public function postSaveWYSIWYG(Request $request)
     {
         $this->validate($request, [
-          'richTextFieldContent' => 'required|max:1000',
+          'richTextField' => 'required|max:1000',
         ]);
 
         $user = \App\User::where('username','=',Auth::user()->username)->get()->first();
 
-        Storage::disk('uploads')->put($user->username.'/wysiwyg_'.$user->username.'.html', $request['richTextFieldContent']);
+        Storage::disk('uploads')->put($user->username.'/wysiwyg_'.$user->username.'.html', $request['richTextField']);
 
-        $user->About = $request['richTextFieldContent'];
+        $user->About = $request['richTextField'];
         $user->save();
-        Storage::put('wysiwyg_'.$user->username.'.html', $request['richTextFieldContent']);
+        Storage::put('wysiwyg_'.$user->username.'.html', $request['richTextField']);
 
-        return response()->json([
-          'richTextFieldSentBack' => $request['richTextFieldContent'],
-          'message' => 'Description updated successfully!'],
-          200);
+        // return response()->json([
+        //   'richTextFieldSentBack' => $request['richTextField'],
+        //   'message' => 'Description updated successfully!'],
+        //   200);
+
+        // If AJAX was used return message using json
+        if($request->ajax()){
+          return response()->json([
+            'richTextFieldSentBack' => $request['richTextField'],
+            'message' => 'Description updated successfully!'],
+            200);
+        }
+
+        // Redirect with message if HTTP (Javescript turned off)
+        return redirect()->back()->with('message', 'Description updated successfully!');
 
     }
 
