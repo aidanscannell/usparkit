@@ -24,8 +24,14 @@ Route::get('/Contact-Us', function(){return view('contact-us');});
 Route::get('/Privacy-Policy', function(){return view('privacy-policy');});
 
 //Auth Controller Get
-Route::get('/Sign-Up', 'AuthController@getSignUp');
-Route::get('/Log-In', 'AuthController@getLogIn');
+Route::get('/Sign-Up', [
+  'uses' => 'AuthController@getSignUp',
+  'middleware' => 'guest'
+]);
+Route::get('/Log-In', [
+  'uses' => 'AuthController@getLogIn',
+  'middleware' => 'guest'
+]);
 Route::get('/Log-Out', [
     'uses' => 'AuthController@getLogout',
     'as' => 'logout'
