@@ -27,15 +27,15 @@ $('.wysiwyg').find('#wysiwygBtn1').on('click', function(){
   });
 });
 
-// $('[name^=pmBtn]').on('click', function(e){
+// $('[name^=form]').find('#pmBtn').on('click', function(e){
 //   e.preventDefault();
-//   var id = this.id.slice(3);
+//   var id = this.name.slice(5);
 //   var subject = $('#subject').val();
 //   var pm = $('#message').val();
 //   $.ajax({
 //     method: 'POST',
-//     url: 'http://localhost:8000/Message/Send',
-//     data: {Subject: subject, Message: pm, _token: token},
+//     url: url2,
+//     data: {id: id, subject: subject, message: pm, id: id, _token: token},
 //     dataType: 'json',
 //     success: function(msg)
 //     {
@@ -44,7 +44,7 @@ $('.wysiwyg').find('#wysiwygBtn1').on('click', function(){
 //         message += '</li></div></div>';
 //         $('#statusui').show().html(message); //this is my div with messages
 //     },
-//     error: function(data)
+//     error: function(data,msg)
 //     {
 //         var errors = '<div class="row"><div class="alert alert-danger">';
 //         for(datos in data.responseJSON){
@@ -53,6 +53,7 @@ $('.wysiwyg').find('#wysiwygBtn1').on('click', function(){
 //         errors += '</div></div>';
 //         $('#statusui').show().html(errors); //this is my div with messages
 //         console.log(errors);
+//
 //     }
 //   })
 //   .done(function (msg){
@@ -61,22 +62,24 @@ $('.wysiwyg').find('#wysiwygBtn1').on('click', function(){
 //   });
 // });
 
+// AJAX for advert modal private message on user page
 $('[name^=form]').find('#pmBtn').on('click', function(e){
   e.preventDefault();
   var id = this.name.slice(5);
   var subject = $('#subject').val();
-  var pm = $('#message').val();
+  var message = $('#message').val();
+  var recipient = $('#recipient').val();
   $.ajax({
     method: 'POST',
-    url: 'http://localhost:8000/Message/Send',
-    data: {Subject: subject, Message: pm, id: id, _token: token},
+    url: url2,
+    data: {recipient: recipient, subject: subject, message: message, id: id, _token: token},
     dataType: 'json',
     success: function(msg)
     {
         var message = '<div class="row"><div class="alert alert-success"><li>';
         message += msg['message'];
         message += '</li></div></div>';
-        $('#statusui').show().html(message); //this is my div with messages
+        $('#advertModalStatus').show().html(message); //this is my div with messages
     },
     error: function(data,msg)
     {
@@ -85,17 +88,18 @@ $('[name^=form]').find('#pmBtn').on('click', function(e){
             errors += '<li>'+data.responseJSON[datos] + '</li>';
         }
         errors += '</div></div>';
-        $('#statusui').show().html(errors); //this is my div with messages
-        console.log(errors);
-
+        $('#advertModalStatus').show().html(errors); //this is my div with messages
     }
   })
   .done(function (msg){
-    console.log(JSON.stringify(msg));
-    //$('#statusui').show().html(msg['message']); //this is my div with messages
+    var message = '<div class="row"><div class="alert alert-success"><li>';
+    message += msg['message'];
+    message += '</li></div></div>';
+    $('#advertModalStatus').show().html(message); //this is my div with messages
   });
 });
 
+// AJAX form private messaging on inbox page
 $('#pmForm').find('#pmBtn').on('click', function(e){
   e.preventDefault();
   var recipient = $('#recipient').val();

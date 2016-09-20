@@ -160,38 +160,6 @@ class UserController extends Controller
 
     }
 
-    public function postSendPM(Request $request)
-    {
-        $this->validate($request, [
-          'Subject' => 'required|max:1',
-          'Message' => 'required|max:4000',
-        ]);
-
-        /*$now = new DateTime();
-        $inbox = new Pm_inbox;
-        $inbox->receiver = 'hi';
-        $inbox->sender = 'hi';
-        $inbox->senttime = $now;
-        $inbox->subject = 'hi';
-        $inbox->message = 'hi';
-        // $inbox->sdelete = 'hi';
-        // $inbox->rdelete = 'hi';
-        $inbox->parent = 'hi';
-        // $inbox->hasreplies = 'hi';
-        // $inbox->rread = 'hi';
-        //$inbox->sread = 'hi';
-        //$inbox->messageID = 'hi';
-
-        $inbox->save();*/
-
-        return response()->json([
-          'message' => 'Message sent successfully!'],
-          200);
-
-
-
-    }
-
     public function getUserImage($filename)
     {
         $file = Storage::disk('local')->get($filename);

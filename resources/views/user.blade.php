@@ -75,19 +75,21 @@
 
                             <div class="comments-form">
                           		<h4 class="title">Send a Private Message</h4>
-                          		<form id="form{{ $sponsorship_advert->advert_id }}" name="form{{ $sponsorship_advert->advert_id }}" class="form" role="form" enctype="multipart/form-data">
+                          		<form id="form{{ $sponsorship_advert->advert_id }}" name="form{{ $sponsorship_advert->advert_id }}" method="post" action="/Message/Send" class="form" role="form" enctype="multipart/form-data">
                           	     <div class="form-group has-feedback">
-                          				<label for="subject1">Subject</label>
+                          				<label for="subject">Subject</label>
                           				<input class="form-control" rows="8" name="subject" id="subject" placeholder=""  required>
                           				<i class="fa fa-navicon form-control-feedback"></i>
                           			</div>
                           			<div class="form-group has-feedback">
-                          				<label for="message1">Message</label>
+                          				<label for="message">Message</label>
                           				<textarea class="form-control" rows="3" name="message" id="message" placeholder=""  required></textarea>
                           				<i class="fa fa-envelope-o form-control-feedback"></i>
                           			</div>
-                          			<button id="pmBtn" name="pmBtn{{ $sponsorship_advert->advert_id }}" class="btn btn-default" >Post</button>
+                          			<button id="pmBtn" name="pmBtn{{ $sponsorship_advert->advert_id }}" class="btn btn-default" type="submit">Post</button>
                                 {{ csrf_field() }}
+                                <input type="hidden" name="recipient" id="recipient" value="{{ $pageOwner->username }}">
+                                <span id="advertModalStatus"></span>
                               </form>
                           	</div>
 
@@ -457,6 +459,7 @@
   <script>
     var token = '{{ Session::token() }}';
     var url = '{{ route('wysiwyg') }}';
+    var url2 = '{{ route('sendMsg') }}';
   </script>
 
 @endsection

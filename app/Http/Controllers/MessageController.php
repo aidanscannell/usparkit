@@ -60,7 +60,7 @@ class MessageController extends Controller
         ]);
     }
 
-    public function postSendMsg(Request $request)
+    public function postSendMsgTo(Request $request)
     {
       // Select all users usernames for validation of recipient
       $users = \App\User::select('username')->get();
@@ -90,8 +90,59 @@ class MessageController extends Controller
 
       $message->save();
 
-      return response()->json([
-        'message' => 'Message sent successfully!'],
-        200);
+      // If AJAX was used return message using json
+      if($request->ajax()){
+        return response()->json([
+          'message' => 'Message sent successfully!'],
+          200);
+      }
+
+      // Redirect with message if HTTP (Javescript turned off)
+      return redirect()->back()->with('message', 'Message sent successfully!');
+      
     }
+
+    public function postSendMsg(Request $request)
+    {
+      // Select all users usernames for validation of recipient
+      $users = \App\User::select('username')->get();
+
+      // Create username string
+      $string = '';
+      foreach($users as $user){
+        if($user->username != Auth::user()->username){
+          $string .= $user->username.',';
+        }
+      }
+
+      // Validate input
+      $this->validate($request, [
+        'recipient' => 'in:'.$string.'',
+        'subject' => 'required|max:200',
+        'message' => 'required|max:5000',
+      ]);
+
+      // Add message to database
+      $datetime = new DateTime();
+      $message = new pm_inbox;
+      $message->receiver = $request['recipient'];
+      $message->sender = Auth::user()->username;
+      $message->senttime = $datetime;
+      $message->subject = $request['subject'];
+      $message->message = $request['message'];
+      $message->parent = 'x';
+      $message->save();
+
+      // If AJAX was used return message using json
+      if($request->ajax()){
+        return response()->json([
+          'message' => 'Message sent successfully!'],
+          200);
+      }
+
+      // Redirect with message if HTTP (Javescript turned off)
+      return redirect()->back()->with('message', 'Message sent successfully!');
+
+    }
+
 }

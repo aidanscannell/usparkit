@@ -60,7 +60,7 @@ Route::post('/Message/Send', [
   'uses' => "UserController@postSendPM",
   'as' => 'sendPM',
 ]);
-Route::post('/Message/Post', [
+Route::post('/Message/Send', [
   'uses' => "MessageController@postSendMsg",
   'as' => 'sendMsg',
 ]);
@@ -81,6 +81,6 @@ Route::get('/Messages/{username}', [
 ]);
 // Messages Controller Post
 Route::post('/Message/Post', [
-  'uses' => "MessageController@postSendMsg",
+  'uses' => "MessageController@postSendMsgTo",
   'as' => 'sendMsgTo',
 ]);
