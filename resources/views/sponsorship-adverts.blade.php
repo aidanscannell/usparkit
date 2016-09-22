@@ -101,6 +101,7 @@ function requestSearch(){
     <?php //include_once 'php_includes/advertSearch.php' ?>
     <div class="light-gray-bg section">
     <div class="container">
+      @include('includes.message-block')
       <h3>Search Adverts:</h3>
       <!-- filters start -->
       <div class="sorting-filters text-center mb-20">
@@ -194,20 +195,21 @@ function requestSearch(){
 
                           <div class="comments-form">
                         		<h4 class="title">Send a Private Message</h4>
-                        		<form id="advertPmForm" name="advertPmForm" method="post" class="form" role="form" action="/Message/Post" enctype="multipart/form-data">
+                        		<form id="form{{ $advert->advert_id }}" name="form{{ $advert->advert_id }}" method="post" class="form" role="form" action="/Message/Post" enctype="multipart/form-data">
                       	      <div class="form-group has-feedback">
                         				<label for="subject1">Subject</label>
-                        				<input class="form-control" rows="8" id="{{ $advert->advert_id }}Subject" placeholder="" required>
+                        				<input class="form-control" rows="8" id="{{ $advert->advert_id }}Subject" name="subject" placeholder="" required>
                         				<i class="fa fa-navicon form-control-feedback"></i>
                         			</div>
                         			<div class="form-group has-feedback">
                         				<label for="message1">Message</label>
-                        				<textarea class="form-control" rows="3" id="{{ $advert->advert_id }}Message" placeholder=""  required></textarea>
+                        				<textarea class="form-control" rows="3" id="{{ $advert->advert_id }}Message" name="message" placeholder=""  required></textarea>
                         				<i class="fa fa-envelope-o form-control-feedback"></i>
                         			</div>
-                        			<button id="advertPmBtn" name="advertPmBtn{{ $advert->advert_id }}" type="button" class="btn btn-default">Post</button>
+                        			<button id="pmBtn" name="pmBtn{{ $advert->advert_id }}" type="submit" class="btn btn-default">Post</button>
                               {{ csrf_field() }}
                               <input type="hidden" name="recipient" id="{{ $advert->advert_id }}Recipient" value="{{ $advert->user }}">
+                              <span id="advertModalStatus{{ $advert->advert_id }}"></span>
                         		</form>
                         	</div>
 
@@ -288,6 +290,11 @@ function requestSearch(){
       for (var selector in config) {
         $(selector).chosen(config[selector]);
       }
+    </script>
+
+    <script>
+      var token = '{{ Session::token() }}';
+      var url2 = '{{ route('sendMsg') }}';
     </script>
 
 
