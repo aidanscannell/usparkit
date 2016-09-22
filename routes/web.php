@@ -100,3 +100,14 @@ Route::post('/Message/DeleteReply', [
   'uses' => "MessageController@postDeleteReply",
   'as' => 'deleteReply',
 ]);
+
+// Sponsorship Advert Controller Get
+Route::get('Sponsorship-Feed', [
+  'uses' => 'FeedController@getSelectSponsorshipPage',
+  'as' => 'selectSponsorshipPage'
+]);
+// Sponsorship Advert Controller Post
+// Route::get('/Advert/Message/Send', [
+//   'uses' => 'MessageController@post',
+//   'as' => 'selectSponsorshipPage'
+// ]);
