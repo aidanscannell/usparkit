@@ -92,3 +92,11 @@ Route::post('/Message/Post', [
   'uses' => "MessageController@postSendMsgTo",
   'as' => 'sendMsgTo',
 ]);
+Route::post('/Message/Reply', [
+  'uses' => "MessageController@postSendReply",
+  'as' => 'sendReply',
+]);
+Route::post('/Message/DeleteReply', [
+  'uses' => "MessageController@postDeleteReply",
+  'as' => 'deleteReply',
+]);

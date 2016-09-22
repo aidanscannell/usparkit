@@ -123,7 +123,7 @@
           <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12" style="padding-bottom:10px;">
             <div class="center-block p-20 light-gray-bg">
               <div class="owl-carousel content-slider-with-controls">
-                <div class="overlay-container overlay-visible" id="image{{ $pageOwner->avatar }}">
+                <div class="overlay-container overlay-visible">
       						<img src="/userz/{{ $pageOwner->username }}/{{ $pageOwner->avatar }}" id="profilePicture"  alt="">
       						<div class=" hidden-xs">
       							<div class="text">
@@ -136,16 +136,16 @@
                 <!-- START of PHOTOS MODAL -->
                 @foreach($photos as $photo)
                   @if($photo->filename != $pageOwner->avatar)
-                  <div class="overlay-container overlay-visible" id="image{{ $pageOwner->avatar }}">
-            						<img src="/userz/{{ $pageOwner->username }}/{{ $photo->filename }}"  alt="">
-            						<div class=" hidden-xs">
-            							<div class="text">
-            								<p>{{ $photo->gallery }}</p>
-            							</div>
-            						</div>
-            						<a href="/userz/{{ $pageOwner->username }}/{{ $photo->filename }}" class="popup-img overlay-link" title="{{ $photo->gallery }}"><i class="icon-plus-1"></i></a>
-            					</div>
-                    @endif
+                    <div class="overlay-container overlay-visible">
+          						<img src="/userz/{{ $pageOwner->username }}/{{ $photo->filename }}"  alt="">
+          						<div class=" hidden-xs">
+          							<div class="text">
+          								<p>{{ $photo->gallery }}</p>
+          							</div>
+          						</div>
+          						<a href="/userz/{{ $pageOwner->username }}/{{ $photo->filename }}" class="popup-img overlay-link" title="{{ $photo->gallery }}"><i class="icon-plus-1"></i></a>
+          					</div>
+                  @endif
                 @endforeach
               </div>
 

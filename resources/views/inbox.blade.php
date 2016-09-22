@@ -105,10 +105,11 @@
         							</div>
         							<div id="comments{{$message->inbox_id}}" style="display:none;">
 
+                        <!-- Current replies start -->
                         @foreach($replies as $reply)
                           @if($reply->messageID == $message->inbox_id)
                             <!-- comment start -->
-                    				<div class="comment clearfix" id="status{{ $reply->inbox_id }}">
+                    				<div class="comment clearfix" id="replyMessages{{ $reply->inbox_id }}" name="replyMessages{{ $reply->inbox_id }}">
                     					<div class="comment-avatar">
                                 @if($reply->sender == Auth::user()->username)
                     						  <img class="img-circle" src="/userz/{{ Auth::user()->username }}/{{ Auth::user()->avatar }}" alt="{{ $reply->sender}}">
@@ -122,28 +123,35 @@
                     					<div class="comment-content">
                     						<div class="comment-body clearfix">
                     							<p>{{ $reply->message }}</p>
-                    							<a class="btn-sm-link link-dark pull-left" onclick="deletePm('{{ $reply->inbox_id }}','status{{ $reply->inbox_id }}','{{ $reply->sender }}','reply')" id="deleteBtn{{ $reply->inbox_id }}"><i class="fa fa-close"></i> Delete</a>
+                    							<a class="btn-sm-link link-dark pull-left" id="deleteBtn" name="deleteBtn{{ $reply->inbox_id }}-{{ $message->inbox_id }}"><i class="fa fa-close"></i> Delete</a>
                     						</div>
                     					</div>
                     				</div>
                     				<!-- comment end -->
                           @endif
                         @endforeach
+                        <!-- Current replies end -->
 
 
         								<div id="newReply{{$message->inbox_id}}"></div>
 
+                        <!-- Send reply form start -->
         								<div class="p-20 light-gray-bg" id="replyForm{{$message->inbox_id}}" >
         							    <h2 class="title">Reply</h2>
-        							    <form id="form{{$message->inbox_id}}" name="form" method="post" class="form" role="form" action="[[~[[*id]]]]" enctype="multipart/form-data">
+        							    <form id="replyForm{{$message->inbox_id}}" name="replyForm{{$message->inbox_id}}" name="form" method="post" class="form" role="form" action="/Message/Reply" enctype="multipart/form-data">
         							      <div class="form-group has-feedback">
         							        <label for="message{{$message->inbox_id}}">Message</label>
-        							        <textarea class="form-control" rows="4" id="message{{$message->inbox_id}}" placeholder="" required></textarea>
+        							        <textarea class="form-control" rows="4" id="message{{$message->inbox_id}}" name="message" placeholder="" required></textarea>
         							        <i class="fa fa-envelope-o form-control-feedback"></i>
         							      </div>
-        							      <button id="replyBtn2{{$message->inbox_id}}" type="button" class="btn btn-default" onclick="replyToPm('{{$message->inbox_id}}','{{ Auth::user()->username }}','message{{$message->inbox_id}}','replyBtn2{{$message->inbox_id}}','{{$message->sender}}')">Reply</button>
+        							      <button id="replyBtn" name="replyBtn{{$message->inbox_id}}" type="submit" class="btn btn-default">Reply</button>
+                            <input type="hidden" name="recipient" id="recipient{{ $message->inbox_id }}" value="{{ $message->sender }}">
+                            {{ csrf_field() }}
         							    </form>
+                          <span id="replyStatus{{ $message->inbox_id }}"
         							  </div>
+                        <!-- Send reply form end -->
+
         							</div>
         						</div>
       						</div>
@@ -236,6 +244,8 @@
 
     <script>
       var url = '{{ route('sendMsgTo') }}';
+      var url2 = '{{ route('sendReply') }}';
+      var url3 = '{{ route('deleteReply') }}';
       var token = '{{ Session::token() }}';
     </script>
 
