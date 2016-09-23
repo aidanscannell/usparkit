@@ -17,7 +17,7 @@
 
 @section('content')
   <!-- banner start -->
-  <div class="banner default-translucent-bg" style="background-image:url('images/page-about-me-banner.jpg');background-position:50% 0;">
+  <div class="banner default-translucent-bg" style="background-image:url('/src/images/page-about-me-banner.jpg');background-position:50% 0;">
     <!-- breadcrumb start -->
     <div class="breadcrumb-container">
       <div class="container">
@@ -47,7 +47,7 @@
       <h3>Search Users:</h3>
       <!-- filters start -->
       <div class="sorting-filters text-center mb-20">
-        <form class="form-inline" action="<?php //echo $_SERVER['PHP_SELF']; ?>" method="post" enctype=”multipart/form-data”>
+        <form class="form-inline" action="/Connections" method="post" enctype=”multipart/form-data”>
           <div class="row">
 
             <div class="col-lg-3 col-md-3 col-xs-12">
@@ -131,6 +131,31 @@
   <!-- section start -->
   <!-- ================ -->
   <?php //echo $searchUsers; ?>
+  <section class="section pv-40 clearfix">
+		<div class="container light-gray-bg">
+			<h3>Search<strong> Results</strong></h3>
+			<div class="row grid-space-3">
+
+        <div class="col-md-2 col-sm-6">
+  				<div class="image-box shadow bordered text-center mb-20">
+  					<div class="overlay-container">
+  						<img src="'.$friend_pic.'" width="100%;">
+  						<div class="overlay-top">
+  							<div class="text">
+  								<h3><a href="user.php?u='.$friend_username.'">'.$friend_username.'</a></h3>
+  							</div>
+  						</div>
+  						<div class="overlay-bottom">
+  							<p class="small">'.$friend_userType.'</p>
+  						</div>
+  					</div>
+  				</div>
+  			</div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- section end -->
 
   <!-- section start -->
@@ -139,7 +164,25 @@
     <div class="container light-gray-bg">
       <h3>Your <strong>Connections </strong></h3>
       <div class="row grid-space-3">
-        <?php //echo $friendsHTMLnew; ?>
+
+        @foreach($friends as $friend)
+          <div class="col-md-2 col-sm-6">
+      			<div class="image-box shadow bordered text-center mb-20">
+      				<div class="overlay-container">
+      					<img src="/userz/{{ $friend->username }}/{{ $friend->avatar }}" width="100%;">
+      					<div class="overlay-top">
+      						<div class="text">
+      							<h3><a href="/User/">{{ $friend->username }}</a></h3>
+      						</div>
+      					</div>
+      					<div class="overlay-bottom">
+      						<p class="small">{{ $friend->userType }}</p>
+      					</div>
+      				</div>
+      			</div>
+      		</div>
+        @endforeach
+
       </div>
     </div>
   </section>

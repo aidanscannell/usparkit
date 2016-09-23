@@ -80,6 +80,11 @@ Route::post('resizeImagePost',['as'=>'resizeImagePost','uses'=>'ImageController@
 
 // Connections Controller Get
 Route::get('/Connections', 'ConnectionsController@getConnections');
+// Connections Controller Post
+Route::get('/Connections', [
+  'uses' => 'ConnectionsController@postSearchConnections',
+  'as' => 'searchConnections'
+]);
 
 // Messages Controller Get
 Route::get('/Messages/{username}', [
@@ -107,7 +112,11 @@ Route::get('Sponsorship-Feed', [
   'as' => 'selectSponsorshipPage'
 ]);
 // Sponsorship Advert Controller Post
-// Route::get('/Advert/Message/Send', [
-//   'uses' => 'MessageController@post',
-//   'as' => 'selectSponsorshipPage'
+// Route::post('Sponsorship-Feed/Search-Adverts', [
+//   'uses' => 'FeedController@postSearchAdverts',
+//   'as' => 'searchAdverts'
 // ]);
+Route::post('Sponsorship-Feed', [
+  'uses' => 'FeedController@postSearchAdverts',
+  'as' => 'searchAdverts'
+]);
