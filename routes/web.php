@@ -81,7 +81,7 @@ Route::post('resizeImagePost',['as'=>'resizeImagePost','uses'=>'ImageController@
 // Connections Controller Get
 Route::get('/Connections', 'ConnectionsController@getConnections');
 // Connections Controller Post
-Route::get('/Connections', [
+Route::post('/Connections', [
   'uses' => 'ConnectionsController@postSearchConnections',
   'as' => 'searchConnections'
 ]);

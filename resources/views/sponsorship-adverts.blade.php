@@ -105,7 +105,7 @@ function requestSearch(){
       <h3>Search Adverts:</h3>
       <!-- filters start -->
       <div class="sorting-filters text-center mb-20">
-        <form class="form-inline" action="http://localhost:8888/main_website/root/feed.php" method="post" enctype=”multipart/form-data”>
+        <form class="form-inline" action="/Sponsorship-Feed" method="post" enctype=”multipart/form-data”>
           <div class="row">
             <div class="col-lg-offset-2 col-lg-1 col-md-3 col-xs-12">
               <div class="form-group">
@@ -133,22 +133,48 @@ function requestSearch(){
               </div>
             </div>
 
-            <div class="col-lg-offset-0 col-lg-3 col-md-3 col-xs-12">
+            <div class="col-lg-2 col-md-3 col-xs-12">
               <div class="form-group">
-                <label>Organisation Type</label>
-                  <select data-placeholder="Whose Eligible"  class="chosen-select" multiple tabindex="6" id="eligibleGroups" name="eligibleGroups[]" required>
+                <label>Group Type </label>
+                  <select data-placeholder="Group Type"  class="chosen-select"  multiple tabindex="6" id="GroupType" name="eligibleGroups[]">
                     <option value="AllTypes">All Types</option>
-                    <optgroup label="Organisation Type">
-                      @include('includes.lists.organisation-list')
+                    <optgroup label="Sports">
+                      @include('includes.lists.sports-list')
                     </optgroup>
+                    <optgroup label="Others">
+                      @include('includes.lists.others-list')
+                    </optgroup>
+                  </select>
+              </div>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-xs-12">
+              <div class="form-group">
+                <label>University </label>
+                  <select data-placeholder="University"  class="chosen-select"  multiple tabindex="6" id="universitySearch" name="universitySearch[]">
+                    <option value="AllUniversities">All Universities</option>
+                    <optgroup label="United Kingdom">
+                      @include('includes.lists.university-list')
+                    </optgroup>
+                  </select>
+              </div>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-xs-12">
+              <div class="form-group">
+                <label>Username </label>
+                  <select data-placeholder="Username"  class="chosen-select"  multiple tabindex="6" id="usernameSearch" name="usernameSearch[]">
+                    <option value="AllUsernames">All Usernames</option>
+                    '.$usernameList.'
                   </select>
               </div>
             </div>
 
             <div class="col-lg-3 col-md-3 col-xs-12">
               <div class="form-group">
-                <button type="submit" class="btn btn-default" onclick="advertSearch()">Search <i class="icon-search"></i></button>
+                <button type="submit" class="btn btn-default">Search <i class="icon-search"></i></button>
                 <span id="searchStatus"><?php //echo $search_output; ?></span>
+                {{ csrf_field() }}
               </div>
             </div>
           </div>

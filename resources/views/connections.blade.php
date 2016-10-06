@@ -119,6 +119,8 @@
               </div>
             </div>
 
+            {{ csrf_field() }}
+
           </div>
         </form>
       </div>
@@ -131,30 +133,34 @@
   <!-- section start -->
   <!-- ================ -->
   <?php //echo $searchUsers; ?>
-  <section class="section pv-40 clearfix">
-		<div class="container light-gray-bg">
-			<h3>Search<strong> Results</strong></h3>
-			<div class="row grid-space-3">
+  @if (!is_null($searchResults))
+    <section class="section pv-40 clearfix">
+  		<div class="container light-gray-bg">
+  			<h3>Search<strong> Results</strong></h3>
+  			<div class="row grid-space-3">
 
-        <div class="col-md-2 col-sm-6">
-  				<div class="image-box shadow bordered text-center mb-20">
-  					<div class="overlay-container">
-  						<img src="'.$friend_pic.'" width="100%;">
-  						<div class="overlay-top">
-  							<div class="text">
-  								<h3><a href="user.php?u='.$friend_username.'">'.$friend_username.'</a></h3>
-  							</div>
-  						</div>
-  						<div class="overlay-bottom">
-  							<p class="small">'.$friend_userType.'</p>
-  						</div>
-  					</div>
-  				</div>
-  			</div>
+          @foreach($searchResults as $searchResult)
+            <div class="col-md-2 col-sm-6">
+      				<div class="image-box shadow bordered text-center mb-20">
+      					<div class="overlay-container">
+      						<img src="/Userz/{{ $searchResult->username }}/{{ $searchResult->avatar }}" width="100%;">
+      						<div class="overlay-top">
+      							<div class="text">
+      								<h3><a href="/User/{{ $searchResult->username }}">{{ $searchResult->username }}</a></h3>
+      							</div>
+      						</div>
+      						<div class="overlay-bottom">
+      							<p class="small">{{ $searchResult->userType }}</p>
+      						</div>
+      					</div>
+      				</div>
+      			</div>
+          @endforeach
 
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  @endif
 
   <!-- section end -->
 
