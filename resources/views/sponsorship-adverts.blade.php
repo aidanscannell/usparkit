@@ -98,7 +98,6 @@ function requestSearch(){
     <!-- banner end -->
 
     <!-- ADVERT SEARCH START -->
-    <?php //include_once 'php_includes/advertSearch.php' ?>
     <div class="light-gray-bg section">
     <div class="container">
       @include('includes.message-block')

@@ -117,6 +117,6 @@ Route::get('Sponsorship-Feed', [
 //   'as' => 'searchAdverts'
 // ]);
 Route::post('Sponsorship-Feed', [
-  'uses' => 'FeedController@postSearchAdverts',
+  'uses' => 'FeedController@postSponsorshipAdverts',
   'as' => 'searchAdverts'
 ]);
