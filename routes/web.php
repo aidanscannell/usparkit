@@ -120,3 +120,19 @@ Route::post('Sponsorship-Feed', [
   'uses' => 'FeedController@postSponsorshipAdverts',
   'as' => 'searchAdverts'
 ]);
+
+// Friends Controller Post
+Route::post('Add-Connection', [
+  'uses' => 'FriendController@postSendRequest',
+]);
+Route::post('Accept-Connection', [
+  'uses' => 'FriendController@postAcceptRequest',
+]);
+Route::post('Reject-Connection', [
+  'uses' => 'FriendController@postRejectRequest',
+]);
+
+// Notification Controller Get
+Route::get('Notifications/{username}', [
+  'uses' => 'NotificationController@getNotifications',
+]);

@@ -179,7 +179,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         \Schuppo\PasswordStrength\PasswordStrengthServiceProvider::class,
-        Hootlex\Friendships\FriendshipsServiceProvider::class,
 
     ],
 

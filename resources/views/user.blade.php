@@ -48,7 +48,6 @@
             <!-- page-title end -->
 
             <!-- Modal Start-->
-            <?php //echo $advertModals; //echo $requestModals; ?>
             @foreach($sponsorship_adverts as $sponsorship_advert)
               <div class="modal fade" id="{{ $sponsorship_advert->modalRef2 }}{{ $sponsorship_advert->advert_id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             		<div class="modal-dialog">
@@ -230,6 +229,16 @@
                 <button class="btn btn-default" onclick="friendToggle('friend','{{ $pageOwner->username }},'friendBtn')">Request Connection</button>
               @endif
             </span>
+            <form method="POST" action="/Add-Connection">
+              <button class="btn btn-default" type="submit">Connect</button>
+              <input name="username" type="hidden" value="{{ $pageOwner->username }}">
+              {{ csrf_field() }}
+            </form>
+            <form method="POST" action="/Remove-Connection">
+              <input name="username" type="hidden" value="{{ $pageOwner->username }}">
+              <button class="btn btn-default" type="submit">Unconnect</button>
+              {{ csrf_field() }}
+            </form>
             <!-- END of FRIENDS BUTTON -->
 
             <!-- START of FRIENDS HTML -->

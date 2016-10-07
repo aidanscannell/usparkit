@@ -63,6 +63,7 @@
                         <li class='dropdown active'>
                           <a  data-toggle='dropdown'>My Account</a>
                           <ul class='dropdown-menu' id='headerList'>
+                            <li><a href="/Notifications/{{ Auth::user()->username }}" title="Notifications">Notifications</a></li>
                             <li><a href="/Messages/{{ Auth::user()->username}}" title="Messages">Messages</a></li>
                             <li><a class='dropdown-toggle' href='/Connections'>Connections</a></li>
                             <li></li>

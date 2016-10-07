@@ -9,8 +9,7 @@
         "laravel/framework": "5.3.*",
         "intervention/image": "^2.3",
         "guzzlehttp/guzzle": "^6.2",
-        "schuppo/password-strength": "~1.5",
-        "hootlex/laravel-friendships": "^1.0"
+        "schuppo/password-strength": "~1.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
