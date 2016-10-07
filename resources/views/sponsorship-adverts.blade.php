@@ -148,28 +148,6 @@ function requestSearch(){
               </div>
             </div>
 
-            <div class="col-lg-2 col-md-3 col-xs-12">
-              <div class="form-group">
-                <label>University </label>
-                  <select data-placeholder="University"  class="chosen-select"  multiple tabindex="6" id="universitySearch" name="universitySearch[]">
-                    <option value="AllUniversities">All Universities</option>
-                    <optgroup label="United Kingdom">
-                      @include('includes.lists.university-list')
-                    </optgroup>
-                  </select>
-              </div>
-            </div>
-
-            <div class="col-lg-2 col-md-3 col-xs-12">
-              <div class="form-group">
-                <label>Username </label>
-                  <select data-placeholder="Username"  class="chosen-select"  multiple tabindex="6" id="usernameSearch" name="usernameSearch[]">
-                    <option value="AllUsernames">All Usernames</option>
-                    '.$usernameList.'
-                  </select>
-              </div>
-            </div>
-
             <div class="col-lg-3 col-md-3 col-xs-12">
               <div class="form-group">
                 <button type="submit" class="btn btn-default">Search <i class="icon-search"></i></button>

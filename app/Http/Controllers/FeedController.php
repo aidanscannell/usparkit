@@ -14,62 +14,18 @@ class FeedController extends Controller
 {
     public function getSelectSponsorshipPage()
     {
-      if (Auth::user()->userType == 'looking_to_sponsor'){
-          return $this->getSponsorshipRequests();
-      } elseif (Auth::user()->userType == 'looking_to_get_sponsored'){
-        return $this->getSponsorshipAdverts();
-      }
+        if (Auth::user()->userType == 'looking_to_sponsor'){
+            return $this->getSponsorshipRequests();
+        } elseif (Auth::user()->userType == 'looking_to_get_sponsored'){
+          return $this->getSponsorshipAdverts();
+        }
     }
 
     public function getSponsorshipAdverts()
     {
-        $user = \App\User::where('username','=',Auth::user()->username)->get()->first();
+        $adverts = $this->selectAllAdverts();
 
-        $adverts = \DB::table('sponsorship_adverts')->leftJoin('users', 'sponsorship_adverts.user', '=', 'users.username')
-                                                  ->where('sponsorship_adverts.userType','!=',$user->userType)
-                                                  ->where('deletedAdvert','=','0')
-                                                  // ->where($user->groupType,'in','eligible')
-                                                  ->orWhere('sponsorship_adverts.userType','!=',$user->userType)
-                                                  ->where('deletedAdvert','=','0')
-                                                  //->where('eligible','=','AllTypes')
-                                                  ->get()->all();
-
-        //return $adverts;
-        foreach ($adverts as $advert) {
-            // Creat list of eligible groups
-            $advert->eligibleGroups = '';
-            $eligibleGroupsArray = explode(",", $advert->eligible);
-            foreach ($eligibleGroupsArray as $value) {
-              $advert->eligibleGroups .= ''.$value.', ';
-            }
-            $advert->eligibleGroups = rtrim($advert->eligibleGroups, ', ');
-
-            // Make the sponsorship type text
-    				if ($advert->sponsorshipType == 'custom_stash'){
-    					$advert->sponsorshipType = 'Custom Stash';
-    					$advert->modalSponsorshipType = 'Custom Stash';
-    				} else if ($advert->sponsorshipType == 'voucher'){
-    					$advert->sponsorshipType = 'Voucher';
-    					$advert->modalSponsorshipType = 'Vouchers';
-    				} else if ($advert->sponsorshipType == 'gift_card'){
-    					$advert->sponsorshipType = 'Gift Card';
-    					$advert->modalSponsorshipType = 'Gift Cards';
-    				} else if ($advert->sponsorshipType == 'donation'){
-    					$advert->sponsorshipType = 'Donation';
-    					$advert->modalSponsorshipType = 'Donations';
-    				}
-
-            // Make date
-            $datetime = new DateTime($advert->senttime);
-        		$advert->day= $datetime->format('d');
-        		$advert->year= $datetime->format('Y');
-        		$monthNum = $datetime->format('m');
-        		$advert->monthName = date('M', mktime(0, 0, 0, $monthNum, 10)); // March
-        		$advert->time = $datetime->format('H:i:s');
-
-            // Username with space
-            $advert->pageUsernameSpace = str_replace("-", " ", $advert->username);
-    		}
+        $this->makeDisplayAdverts($adverts);
 
         return view('sponsorship-adverts', [
           'user' => Auth::user(),
@@ -82,53 +38,165 @@ class FeedController extends Controller
         $this->validate($request, [
             'sponsorshipType' => 'required',
             'minValue' => 'required|numeric',
-            'eligibleGroups' => 'required'
+            // 'eligibleGroups' => '',
         ]);
 
-        // $adverts = \App\Sponsorship_adverts::where('amount','>',$request['minValue']);
+        $other_userType = $this->getOtherUserType();
 
-        // foreach ($request['sponsorshipType'] as $sType){
-        //   if($sType == 'all'){
-        //     break;
-        //   }
-        //
-        //   if($count > 0){
-        //     $eligible .= "";
-        //   } else{
-        //     $eligible = "['eligible','like','%AllSports%'";
-        //   }
-        //   $count++;
-        // }
-        //
-        // return $adverts->get()->all();
+        // Create search logic for sponsorship type
+      	$sponsorshipType = '';
+      	$counter = 0;
+        $allSelected = false;
+      	foreach ($request['sponsorshipType'] as $valueType){
+      		if ($valueType == 'all'){
+      			$allSelected = true;
+      		}
+      	}
+      	if ($allSelected == false){
+      		foreach ($request['sponsorshipType'] as $valueType){
+      			if ($counter == 0){
+      				$sponsorshipType .= '(sponsorshipType=\''.$valueType.'\'';
+      			} else {
+      				$sponsorshipType .= ' OR sponsorshipType=\''.$valueType.'\'';
+      			}
+      			$counter++;
+      		}
+      		if ($counter > 0){
+      			$sponsorshipType .= ') AND ';
+      		}
+      	} else if ($allSelected == true) {
+      		$sponsorshipType = '';
+      	}
 
-        $count = 0;
-        foreach ($request['eligibleGroups'] as $gType){
-            if($count > 0){
-              $eligible .= ", 'or', 'eligible','like','%AllTypes%'";
-            } else{
-              $eligible = "['eligible','like','%AllSports%'";
-            }
-            $count++;
+      	// Create search logic for ELIGIBLE GROUPS
+        $eligibleGroupsLogic = '';
+        if (!is_null($request['eligibleGroups'])){
+        	$counter = 0;
+        	foreach ($request['eligibleGroups'] as $valueType){
+        		if ($counter == 0){
+        			$eligibleGroupsLogic .= '(eligible LIKE \'%'.$valueType.'%\'';
+        		} else {
+        			$eligibleGroupsLogic .= ' OR eligible LIKE \'%'.$valueType.'%\'';
+        		}
+        		$counter++;
+        	}
+        	if ($counter > 0){
+        		$eligibleGroupsLogic .= ') AND ';
+        	}
         }
-        $eligible .= "]";
 
-        // foreach ($request['eligibleGroups'] as $gType){
-        //     $adverts = $adverts->orwhere('eligible','like','%'.$gType.'%')
-        //                         ->where('amount','>',$request['minValue']);
-        //
-        // }
+        // Get adverts from database
+      	$sql = 'SELECT * FROM sponsorship_adverts WHERE '.$sponsorshipType.' '.$eligibleGroupsLogic.' (userType=\''.$other_userType.'\') AND (amount>'.$request['minValue'].') ORDER BY senttime DESC';
+        $adverts = \DB::select($sql);
+        foreach ($adverts as $advert){
+            $advert->avatar = \App\User::where('username', '=', $advert->user)->get()->first()->avatar;
+        }
 
+        $this->makeDisplayAdverts($adverts);
+
+        return view('sponsorship-adverts', [
+          'adverts' => $adverts,
+          'user' => Auth::user(),
+        ]);
+    }
+
+    public function postSearchRequests(Request $request)
+    {
+        $this->validate($request, [
+            'sponsorshipType' => 'required',
+            'minValue' => 'required|numeric',
+            'eligibleGroups' => 'required',
+            'universitySearch' => 'required',
+        ]);
+
+        $other_userType = $this->getOtherUserType();
+
+        // Create search logic for sponsorship type
+      	$sponsorshipType = '';
+      	$counter = 0;
+        $allSelected = false;
+      	foreach ($request['sponsorshipType'] as $valueType){
+      		if ($valueType == 'all'){
+      			$allSelected = true;
+      		}
+      	}
+      	if ($allSelected == false){
+      		foreach ($request['sponsorshipType'] as $valueType){
+      			if ($counter == 0){
+      				$sponsorshipType .= '(sponsorshipType=\''.$valueType.'\'';
+      			} else {
+      				$sponsorshipType .= ' OR sponsorshipType=\''.$valueType.'\'';
+      			}
+      			$counter++;
+      		}
+      		if ($counter > 0){
+      			$sponsorshipType .= ') AND ';
+      		}
+      	} else if ($allSelected == true) {
+      		$sponsorshipType = '';
+      	}
+
+      	// Create search logic for ELIGIBLE GROUPS
+      	$eligibleGroupsLogic = '';
+      	$counter = 0;
+      	foreach ($request['eligibleGroups'] as $valueType){
+      		if ($counter == 0){
+      			$eligibleGroupsLogic .= '(eligible LIKE \'%'.$valueType.'%\'';
+      		} else {
+      			$eligibleGroupsLogic .= ' OR eligible LIKE \'%'.$valueType.'%\'';
+      		}
+      		$counter++;
+      	}
+      	if ($counter > 0){
+      		$eligibleGroupsLogic .= ') AND ';
+      	}
+
+        // Get adverts from database
+      	$sql = 'SELECT * FROM sponsorship_adverts WHERE '.$sponsorshipType.' '.$eligibleGroupsLogic.' (userType=\''.$other_userType.'\') AND (amount>'.$request['minValue'].') ORDER BY senttime DESC';
+        $adverts = \DB::select($sql);
+        foreach ($adverts as $advert){
+            $advert->avatar = \App\User::where('username', '=', $advert->user)->get()->first()->avatar;
+        }
+
+        $this->makeDisplayRequests($adverts);
+
+        return view('sponsorship-requests', [
+          'adverts' => $adverts,
+          'user' => Auth::user(),
+        ]);
+    }
+
+    public function selectAllAdverts(){
         $adverts = \DB::table('sponsorship_adverts')->leftJoin('users', 'sponsorship_adverts.user', '=', 'users.username')
-                                                    ->where([
-                                                        ['sponsorship_adverts.amount','>',(int)$request['minValue']],
-                                                        ['sponsorship_adverts.userType','!=',Auth::user()->userType],
-                                                        //['eligible','like','%AllSports%', 'or', 'eligible','like','%AllTypes%']
-                                                        ['sponsorshipType', 'like', '%donation%']//, 'or', 'sponsorshipType', 'like', '%voucher%']
-                                                    ])
-                                                    ->get()
-                                                    ->all();
+                                                  ->where('sponsorship_adverts.userType','!=',Auth::user()->userType)
+                                                  ->where('deletedAdvert','=','0')
+                                                  ->orWhere('sponsorship_adverts.userType','!=',Auth::user()->userType)
+                                                  ->where('deletedAdvert','=','0')
+                                                  ->get()->all();
+        return $adverts;
+    }
 
+    // public function selectAdverts(){
+    //     $adverts = \DB::table('sponsorship_adverts')->leftJoin('users', 'sponsorship_adverts.user', '=', 'users.username')
+    //                                               ->where('sponsorship_adverts.userType','!=',Auth::user()->userType)
+    //                                               ->where('deletedAdvert','=','0')
+    //                                               ->orWhere('sponsorship_adverts.userType','!=',Auth::user()->userType)
+    //                                               ->where('deletedAdvert','=','0')
+    //                                               ->get()->all();
+    //     return $adverts;
+    //
+    //     $adverts = \DB::table('sponsorship_adverts')->leftJoin('users', 'sponsorship_adverts.user', '=', 'users.username')
+    //                                               ->where('sponsorship_adverts.userType','!=',Auth::user()->userType)
+    //                                               ->where('deletedAdvert','=','0')
+    //                                               ->whereIn('eligible', $eligible)
+    //                                               ->orWhere('sponsorship_adverts.userType','!=',Auth::user()->userType)
+    //                                               ->where('deletedAdvert','=','0')
+    //                                               //->where('eligible','=','AllTypes')
+    //                                               ->get()->all();
+    //
+    // }
+
+    public function makeDisplayAdverts($adverts){
         foreach ($adverts as $advert) {
             // Creat list of eligible groups
             $advert->eligibleGroups = '';
@@ -137,95 +205,43 @@ class FeedController extends Controller
               $advert->eligibleGroups .= ''.$value.', ';
             }
             $advert->eligibleGroups = rtrim($advert->eligibleGroups, ', ');
+            $advert->eligibleGroups = preg_replace('/(?<!\ )[A-Z]/', ' $0', $advert->eligibleGroups);
 
             // Make the sponsorship type text
-    				if ($advert->sponsorshipType == 'custom_stash'){
-    					$advert->sponsorshipType = 'Custom Stash';
-    					$advert->modalSponsorshipType = 'Custom Stash';
-    				} else if ($advert->sponsorshipType == 'voucher'){
-    					$advert->sponsorshipType = 'Voucher';
-    					$advert->modalSponsorshipType = 'Vouchers';
-    				} else if ($advert->sponsorshipType == 'gift_card'){
-    					$advert->sponsorshipType = 'Gift Card';
-    					$advert->modalSponsorshipType = 'Gift Cards';
-    				} else if ($advert->sponsorshipType == 'donation'){
-    					$advert->sponsorshipType = 'Donation';
-    					$advert->modalSponsorshipType = 'Donations';
-    				}
-
-            // Make date
-            $datetime = new DateTime($advert->senttime);
-        		$advert->day= $datetime->format('d');
-        		$advert->year= $datetime->format('Y');
-        		$monthNum = $datetime->format('m');
-        		$advert->monthName = date('M', mktime(0, 0, 0, $monthNum, 10)); // March
-        		$advert->time = $datetime->format('H:i:s');
-
-            // Username with space
-            $advert->pageUsernameSpace = str_replace("-", " ", $advert->username);
-    		}
-
-        return view('sponsorship-adverts', [
-          'adverts' => $adverts,
-          'user' => Auth::user(),
-        ]);
-    }
-
-    public function getSponsorshipRequests()
-    {
-        $eligibleType = 'sponsor';
-
-        $user = \App\User::where('username','=',Auth::user()->username)->get()->first();
-
-        $adverts = \DB::table('sponsorship_adverts')->leftJoin('users', 'user', '=', 'username')
-                                                  //->where('userType','!=',Auth::user()->userType)
-                                                  ->where('deletedAdvert','=','0')
-                                                  ->where('eligible','=',$eligibleType)
-                                                  //->orWhere('userType','!=',Auth::user()->userType)
-                                                  ->orwhere('deletedAdvert','=','0')
-                                                  ->where('eligible','=','AllTypes')
-                                                  ->get()->all();
-
-        foreach ($adverts as $advert) {
-            // Creat list of eligible groups
-            $advert->eligibleGroups = '';
-            $eligibleGroupsArray = explode(",", $advert->eligible);
-            foreach ($eligibleGroupsArray as $value) {
-                $advert->eligibleGroups .= ''.$value.', ';
+            if ($advert->sponsorshipType == 'custom_stash'){
+              $advert->sponsorshipType = 'Custom Stash';
+              $advert->modalSponsorshipType = 'Custom Stash';
+            } else if ($advert->sponsorshipType == 'voucher'){
+              $advert->sponsorshipType = 'Voucher';
+              $advert->modalSponsorshipType = 'Vouchers';
+            } else if ($advert->sponsorshipType == 'gift_card'){
+              $advert->sponsorshipType = 'Gift Card';
+              $advert->modalSponsorshipType = 'Gift Cards';
+            } else if ($advert->sponsorshipType == 'donation'){
+              $advert->sponsorshipType = 'Donation';
+              $advert->modalSponsorshipType = 'Donations';
             }
 
-            // Make the sponsorship type text
-    				if ($advert->sponsorshipType == 'custom_stash'){
-    					$advert->sponsorshipType = 'Custom Stash';
-    					$advert->modalSponsorshipType = 'Custom Stash';
-    				} else if ($advert->sponsorshipType == 'voucher'){
-    					$advert->sponsorshipType = 'Voucher';
-    					$advert->modalSponsorshipType = 'Vouchers';
-    				} else if ($advert->sponsorshipType == 'gift_card'){
-    					$advert->sponsorshipType = 'Gift Card';
-    					$advert->modalSponsorshipType = 'Gift Cards';
-    				} else if ($advert->sponsorshipType == 'donation'){
-    					$advert->sponsorshipType = 'Donation';
-    					$advert->modalSponsorshipType = 'Donations';
-    				}
-
             // Make date
             $datetime = new DateTime($advert->senttime);
-        		$advert->day= $datetime->format('d');
-        		$advert->year= $datetime->format('Y');
-        		$monthNum = $datetime->format('m');
-        		$advert->monthName = date('M', mktime(0, 0, 0, $monthNum, 10)); // March
-        		$advert->time = $datetime->format('H:i:s');
+            $advert->day= $datetime->format('d');
+            $advert->year= $datetime->format('Y');
+            $monthNum = $datetime->format('m');
+            $advert->monthName = date('M', mktime(0, 0, 0, $monthNum, 10)); // March
+            $advert->time = $datetime->format('H:i:s');
 
             // Username with space
-            $advert->pageUsernameSpace = str_replace("-", " ", $advert->username);
-    		}
-
-
-
-        return view('sponsorship-adverts', [
-          'user' => Auth::user(),
-          'adverts' => $adverts,
-        ]);
+            $advert->pageUsernameSpace = str_replace("-", " ", $advert->user);
+        }
     }
+
+    public function getOtherUserType(){
+      if (Auth::user()->userType != 'looking_to_get_sponsored') {
+        $other_userType = 'looking_to_get_sponsored';
+      } elseif (Auth::user()->userType != 'looking_to_sponsor') {
+        $other_userType = 'looking_to_sponsor';
+      }
+      return $other_userType;
+    }
+
 }
