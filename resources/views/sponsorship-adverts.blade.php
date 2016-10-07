@@ -173,7 +173,6 @@ function requestSearch(){
             <div class="col-lg-3 col-md-3 col-xs-12">
               <div class="form-group">
                 <button type="submit" class="btn btn-default">Search <i class="icon-search"></i></button>
-                <span id="searchStatus"><?php //echo $search_output; ?></span>
                 {{ csrf_field() }}
               </div>
             </div>
