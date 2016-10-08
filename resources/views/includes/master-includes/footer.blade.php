@@ -11,8 +11,8 @@
                 <li><a href="mailto:info@usparkit.com" class="link-dark"><i class="text-default fa fa-envelope-o pl-10 pr-5"></i>info@usparkit.com</a></li>
               </ul>
               <ul class="list-inline mb-20">
-                <li><a href="Privacy-Policy">Privacy Policy</a></li>
-                <li><a href="Terms-and-Conditions">Terms and Conditions</a></li>
+                <li><a href="/Privacy-Policy">Privacy Policy</a></li>
+                <li><a href="/Terms-and-Conditions">Terms and Conditions</a></li>
               </ul>
               <ul class="social-links circle animated-effect-1 margin-clear">
                 <li class="facebook"><a target="_blank" href="http://www.facebook.com"><i class="fa fa-facebook"></i></a></li>
