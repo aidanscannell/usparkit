@@ -284,3 +284,39 @@ $('#modalListDelete').find('[name=deleteLink]').on('click', function(e){
     // $('#image'+msg['filename']).hide();
   });
 });
+
+// AJAX for mark notification as read
+$('[name=notification]').find('[name=markAsRead]').on('click', function(e){
+  // e.preventDefault();
+  var id = this.id.slice(10);
+  $.ajax({
+    method: 'POST',
+    url: url,
+    data: {id: id, _token: token},
+    dataType: 'json',
+    success: function(msg)
+    {
+        var message = '<div class="row"><div class="alert alert-success"><li>';
+        message += msg['message'];
+        message += '</li></div></div>';
+        $('#notificationStatus'+id).show().html(message); //this is my div with messages
+    },
+    error: function(data,msg)
+    {
+        var errors = '<div class="row"><div class="alert alert-danger">';
+        for(datos in data.responseJSON){
+            errors += '<li>'+data.responseJSON[datos] + '</li>';
+        }
+        errors += '</div></div>';
+        $('#notificationStatus'+id).show().html(errors); //this is my div with messages
+    }
+  })
+  .done(function (msg){
+    // console.log(JSON.stringify(msg));
+    var message = '<div class="row" style="padding-left:20px;padding-right:20px;"><div class="alert alert-success"><li>';
+    message += msg['message'];
+    message += '</li></div></div>';
+    $('#notificationStatus'+id).show().html(message); //this is my div with messages
+    $('#notification'+id).hide();
+  });
+});

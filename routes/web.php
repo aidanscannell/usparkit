@@ -72,6 +72,10 @@ Route::post('/Picture/Delete', [
   'uses' => "UserController@postDeletePic",
   'as' => 'deletePic',
 ]);
+Route::post('/Mark-As-Read', [
+  'uses' => "NotificationController@postMarkAsRead",
+  'as' => 'markAsRead',
+]);
 
 // Image Controller Get
 Route::get('resizeImage', 'ImageController@resizeImage');
@@ -127,9 +131,6 @@ Route::post('Add-Connection', [
 ]);
 Route::post('Accept-Connection', [
   'uses' => 'FriendController@postAcceptRequest',
-]);
-Route::post('Reject-Connection', [
-  'uses' => 'FriendController@postRejectRequest',
 ]);
 
 // Notification Controller Get
